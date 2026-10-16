@@ -47,6 +47,14 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | `update-hermes-skill` | Keeps the skills repo internally consistent whenever a skill changes — version bumps, README table sync, frontmatter compliance. |
 | `user-config-store` | Remembers a per-person setting a skill needs — a path, a browser profile — so the skill only asks once. Never stores secrets. |
 
+## Skills — design foundations (brand layer for visual and customer-facing work)
+
+| Skill | What it does |
+|---|---|
+| `bitpool-brand-guidelines` | How Bitpool sounds — the five voice pillars, naming rules, ready-made boilerplate and positioning — for any copy, name or message written as Bitpool. |
+| `bitpool-design-system` | How Bitpool looks — the six non-negotiables, light and dark tokens, components, the cube logo and a starter HTML template — for any page, deck, report or visual. |
+| `bitpool-search` | A drop-in, on-brand predictive search box (typeahead, cyan highlights, keyboard control) for Bitpool pages with lists or tables. |
+
 ## Mods
 
 None in `mods/` on the snapshot date. `/build-hermes-mod` creates them; `/install-mod` installs them.
