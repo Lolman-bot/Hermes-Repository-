@@ -55,6 +55,14 @@ category folders here. The category (`bitpool`) is chosen at install time with `
 | `update-hermes-skill` | Housekeeping for any skill change: version bump, README row sync, and a runnable house-rules checker. | references/, scripts/ |
 | `user-config-store` | Asks once for a per-person, non-secret value a skill needs and stores it on OneDrive, or under `$HERMES_HOME/bitpool-config/`. | references/, scripts/ |
 
+### Design foundations (brand layer for visual and customer-facing work)
+
+| Skill | What it does | Ships alongside `SKILL.md` |
+|---|---|---|
+| `bitpool-brand-guidelines` | Bitpool's verbal brand: the five voice pillars, naming rules, boilerplate and positioning for any copy written as Bitpool. | references/ |
+| `bitpool-design-system` | Bitpool's visual system: six non-negotiables, light/dark tokens, components, the cube logo and a starter HTML template. | references/, assets/ |
+| `bitpool-search` | Drop-in on-brand predictive search (typeahead, cyan highlights, keyboard nav) for Bitpool pages, lists and tables. | references/, assets/ |
+
 ## House rules for authoring skills
 
 These rules are the source of truth. `/update-hermes-skill` carries a working copy of them in its
