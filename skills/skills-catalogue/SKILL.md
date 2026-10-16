@@ -1,7 +1,7 @@
 ---
 name: skills-catalogue
 description: "Use when asked what Bitpool skills exist. Dated list."
-version: 1.0.0
+version: 1.1.0
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
