@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BitpoolSearch — demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="bitpool-search.css">
+<style>
+  /* minimal Bitpool tokens so the widget themes correctly on this bare page */
+  :root{
+    --bg:#fff; --bg-2:#f6f8fa; --navy:#1B2732; --ink:#1B2732; --ink-50:#6e7c8b;
+    --text-strong:#0b1218; --accent:#00ADEF; --hair:rgba(11,24,32,.08); --hair-strong:rgba(11,24,32,.14);
+    --sans:"Inter",sans-serif;
+  }
+  body{font-family:var(--sans);color:var(--ink);background:#fff;font-weight:300;margin:0;padding:48px 24px;line-height:1.6}
+  .wrap{max-width:720px;margin:0 auto}
+  h1{font-weight:200;letter-spacing:-.03em;font-size:2rem;margin:0 0 4px}
+  .sub{color:var(--ink-50);margin:0 0 28px;font-size:14px}
+  /* host the search — flex row so the pill sizes naturally */
+  .bar{display:flex;margin-bottom:26px}
+  /* results list */
+  .row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--hair);border-radius:8px;margin-bottom:8px}
+  .row .ic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex:none}
+  .row .n{font-weight:500;color:var(--text-strong)}
+  .row .m{font-size:12px;color:var(--ink-50)}
+  .row.hit{outline:2px solid rgba(0,173,239,.4);outline-offset:1px}
+  .count{font-size:12px;color:var(--ink-50);margin-bottom:10px}
+  strong{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Find <strong>anything</strong>, fast</h1>
+  <p class="sub">Type a project code, a name, or a client. Use ↑ ↓ to move, Enter to pick, Esc to close. Try <strong>bp</strong> to see the styled scrollbar.</p>
+
+  <div class="bar"><div id="searchHost"></div></div>
+
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+</div>
+
+<script src="bitpool-search.js"></script>
+<script>
+  // demo dataset — in a real page these come from your data model
+  const DATA = [
+    {type:'project', label:'BP-0726', meta:'Dexus — full-scope optimisation', tag:'90%', color:'#007db0'},
+    {type:'project', label:'BP-0684', meta:'Colliers Australia rollout',       tag:'75%', color:'#2f86c4'},
+    {type:'project', label:'BP-0491', meta:'Mirvac Aspect WH8',                tag:'WON', color:'#1B2732'},
+    {type:'project', label:'BP-0761', meta:'Capitaland trial',                 tag:'WON', color:'#1B2732'},
+    {type:'project', label:'BP-0710', meta:'33 Alfred St',                     tag:'WON', color:'#1B2732'},
+    {type:'project', label:'BP-0698', meta:'Scentre Group metering',           tag:'50%', color:'#6d8aa8'},
+    {type:'project', label:'BP-0742', meta:'Cyclotek BMS upgrade',             tag:'75%', color:'#2f86c4'},
+    {type:'project', label:'BP-0755', meta:'TCC tower analytics',              tag:'25%', color:'#9aa7b3'},
+    {type:'project', label:'BP-0633', meta:'Chilltec plant tuning',            tag:'WON', color:'#1B2732'},
+    {type:'project', label:'BP-0701', meta:'Arcana fault detection',           tag:'90%', color:'#007db0'},
+    {type:'project', label:'BP-0688', meta:'JCU campus rollout',               tag:'50%', color:'#6d8aa8'},
+    {type:'project', label:'BP-0773', meta:'Logos cold-store sites',           tag:'75%', color:'#2f86c4'},
+    {type:'person',  label:'Ross',    meta:'Delivery engineer · 60% utilised', tag:'PERSON'},
+    {type:'person',  label:'Cam',     meta:'Delivery engineer · 58% utilised', tag:'PERSON'},
+    {type:'person',  label:'Ash',     meta:'Engineer · 17% utilised',          tag:'PERSON'},
+    {type:'client',  label:'Mirvac',  meta:'7 projects',                       tag:'CLIENT'},
+    {type:'client',  label:'Dexus',   meta:'3 projects',                       tag:'CLIENT'},
+    {type:'client',  label:'Colliers',meta:'4 projects',                       tag:'CLIENT'},
+  ];
+
+  const TYPES = {
+    project:{icon:'BP', color:'#1B2732'},
+    person: {icon:'@',  color:'#00ADEF'},
+    client: {icon:'C',  color:'#6d8aa8'}
+  };
+
+  const listEl = document.getElementById('list');
+  const countEl = document.getElementById('count');
+
+  function renderList(q, picked){
+    const ql = (q||'').toLowerCase();
+    const rows = DATA.filter(d => !ql || (d.label+' '+d.meta).toLowerCase().includes(ql));
+    countEl.textContent = rows.length + ' of ' + DATA.length + ' results';
+    listEl.innerHTML = rows.map(d => {
+      const t = TYPES[d.type];
+      const hit = picked && picked.label === d.label;
+      return '<div class="row' + (hit?' hit':'') + '">' +
+        '<div class="ic" style="background:' + (d.color||t.color) + '">' + t.icon + '</div>' +
+        '<div><div class="n">' + d.label + '</div><div class="m">' + d.meta + '</div></div></div>';
+    }).join('') || '<div class="m">No matches.</div>';
+  }
+
+  BitpoolSearch({
+    mount: '#searchHost',
+    placeholder: 'Search projects, people or clients…',
+    items: DATA,
+    types: TYPES,
+    maxResults: 20,                                // show enough to overflow → scroll
+    onInput:  (q) => renderList(q, null),         // live-filter as you type
+    onSelect: (item) => renderList(item.label, item) // highlight the picked row
+  });
+
+  renderList('', null);
+</script>
+</body>
+</html>
