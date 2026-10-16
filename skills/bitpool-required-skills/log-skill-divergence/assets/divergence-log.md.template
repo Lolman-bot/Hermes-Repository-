@@ -1,0 +1,72 @@
+---
+type: skill-divergence
+agent: hermes
+logged: [ISO 8601 with local offset, e.g. 2026-10-16T10:51+10:00]
+logged_by: [person's display name from user-config-store display_name. Required, never blank]
+session_id: [${HERMES_SESSION_ID} / $HERMES_SESSION_ID, or "unknown"]
+session_title: [title from `hermes sessions list` for that id, or "unknown"]
+surface: [cli | tui | desktop | dashboard | gateway:<platform> | cron | unknown]
+hermes_version: [first line of `hermes --version`, or "unknown"]
+hermes_profile: [active profile name, or "default"]
+cwd: [the working directory the session ran in]
+skill: [the skill's frontmatter name, e.g. create-new-skill]
+skill_version: [the skill's frontmatter version as loaded, e.g. 1.0.0]
+skill_source: [Lolman-bot/Hermes-Repository- | bundled | local | <other hub source> | unknown]
+skill_path: [repo-relative path to the most specific file at fault, e.g. skills/<section>/<name>/references/<file>.md:42]
+divergence_type: [fact-contradicted | workflow-gap | trigger-miss]
+severity: [high | medium | low]
+status: unresolved
+resolved_at:
+resolved_by:
+resolution:
+resolution_pr:
+duplicate_of:
+archived_at:
+---
+
+# [One line: what was found, not what was done]
+
+## What the skill claims
+
+> [The verbatim quote. Not a paraphrase: the fix is a wording change, so the exact
+> words matter.]
+
+`[skills/<section>/<name>/path/to/file.md:line]`
+
+## What was actually observed
+
+[What was run, what came back, what that proves. Redacted: describe the shape of the
+result, never the contents. No credentials, no customer or personnel names, no raw tool
+payloads.]
+
+## Conversation excerpt
+
+> [The moment itself, verbatim and redacted. Two or three turns, enough that it makes
+> sense to someone who was not here. This section is usually written too short.]
+
+## Why it matters
+
+[The consequence. What did this cause, or what would it have caused if nobody had
+noticed? One paragraph. If no consequence can be named, this was probably not a
+divergence.]
+
+## Suggested fix
+
+[Name the file. Propose the wording. Show the replacement.
+
+Not "the skill should be updated" but "in skills/<section>/<name>/references/[file].md, the line
+'[current wording]' should read '[proposed wording]'".
+
+If the fix is not obvious, say what would need to be established first, and by whom.]
+
+## Confidence and caveats
+
+* **Reproducible?** [One-off, or seen more than once?]
+* **Environment-specific?** [Could this be this machine, this OS, this profile, this
+  surface (CLI vs gateway), this account, or this moment in time?]
+* **Verified or inferred?** [Did you actually confirm it, or deduce it?]
+* **Could the skill be right?** [Is there a reading in which the skill is correct and
+  this observation is the mistake?]
+
+<!-- Everything below this line is written by whoever resolves the log (via /edit-skill).
+     Leave it out entirely when first logging. -->
