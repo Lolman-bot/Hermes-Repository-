@@ -8,11 +8,12 @@ TUI widgets, hooks, skins) that the mod skills build and install.
 ## Install
 
 ```bash
-# One-time: add this repo as a skill source (tap)
-hermes skills tap add Lolman-bot/Hermes-Repository-
+# Install one skill into the bitpool category (path includes its section folder)
+hermes skills install Lolman-bot/Hermes-Repository-/skills/<section>/<skill-name> --category bitpool
 
-# Install one skill into the bitpool category
-hermes skills install Lolman-bot/Hermes-Repository-/skills/<skill-name> --category bitpool
+# e.g.
+hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/onboarding --category bitpool
+hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-design-foundations/bitpool-design-system --category bitpool
 
 # Later: pull updates for everything installed from here
 hermes skills check
@@ -26,18 +27,24 @@ Start a new session (or run `/reload-skills`) after installing so the skill inde
 
 ```
 README.md                  this file: catalogue + house rules (source of truth)
-skills/<skill-name>/       one folder per skill, exactly one level under skills/
-  SKILL.md                 Hermes frontmatter + body
-  references/  assets/  scripts/  templates/   optional support files
-mods/<mod-name>/           Hermes mods built by /build-hermes-mod (README + tests each)
+skills/
+  bitpool-required-skills/     baseline skills on every Bitpool Hermes install
+  bitpool-design-foundations/  brand layer for visual and customer-facing work
+    <skill-name>/              one folder per skill
+      SKILL.md                 Hermes frontmatter + body
+      references/  assets/  scripts/  templates/   optional support files
+mods/<mod-name>/               Hermes mods built by /build-hermes-mod (README + tests each)
+retired/<section>/<skill-name>/  retired skills, kept readable, never installed
 ```
 
-`hermes skills tap` reads exactly one level under `skills/`, so skills are never nested in
-category folders here. The category (`bitpool`) is chosen at install time with `--category`.
+Section folders mirror the `### ` groups in **Skills** below. The install category (`bitpool`) is
+chosen at install time with `--category`, so every skill lands in one category regardless of section.
+`hermes skills tap add` only scans one level under `skills/`, so it doesn't list sectioned skills;
+install by full path as shown above.
 
 ## Skills
 
-### Required (baseline on every Bitpool Hermes install)
+### `bitpool-required-skills` — Required (baseline on every Bitpool Hermes install)
 
 | Skill | What it does | Ships alongside `SKILL.md` |
 |---|---|---|
@@ -55,7 +62,7 @@ category folders here. The category (`bitpool`) is chosen at install time with `
 | `update-hermes-skill` | Housekeeping for any skill change: version bump, README row sync, and a runnable house-rules checker. | references/, scripts/ |
 | `user-config-store` | Asks once for a per-person, non-secret value a skill needs and stores it on OneDrive, or under `$HERMES_HOME/bitpool-config/`. | references/, scripts/ |
 
-### Design foundations (brand layer for visual and customer-facing work)
+### `bitpool-design-foundations` — Design foundations (brand layer for visual and customer-facing work)
 
 | Skill | What it does | Ships alongside `SKILL.md` |
 |---|---|---|
@@ -71,7 +78,11 @@ These rules are the source of truth. `/update-hermes-skill` carries a working co
 ### Folder, name and slash command
 
 - Folder name == frontmatter `name` == slash command. Lowercase, hyphen-separated, ≤ 64 chars.
-- One folder per skill directly under `skills/`. No category subfolders.
+- Every skill lives in a section folder: `skills/<section>/<skill-name>/`. Nothing sits directly
+  under `skills/`. Section names are lowercase-hyphen and match a `### \`<section>\`` heading under
+  **Skills**; each skill's row sits in its section's table.
+- Skill names are unique across all sections (they install into one `bitpool` category).
+- A new section = a new folder **and** a new `### ` heading with its own table, in the same PR.
 
 ### Frontmatter (Hermes format)
 
@@ -131,17 +142,20 @@ prove.
 
 - `main` only changes through a pull request. Work on a branch named `add/<skill>`,
   `edit/<skill>` or `retire/<skill>`.
+- Moving a skill to another section changes its install path: bump `version` and tell anyone who
+  installed it to reinstall from the new path.
 - Every change to a skill bumps its `version` and syncs its row in the **Skills** table above. A
-  new skill adds a row; a retired skill moves to `retired/<skill-name>/` and loses its row.
+  new skill adds a row; a retired skill moves to `retired/<section>/<skill-name>/` and loses its row.
 - Installed copies update through `hermes skills update`, which compares against this repo's
   `main`. Nothing merged = nothing shipped.
 
 ### Verify before opening the PR
 
-- Every `skills/*/SKILL.md` parses as YAML frontmatter with `name` == folder name and a
+- Every `skills/*/*/SKILL.md` parses as YAML frontmatter with `name` == folder name and a
   `description` of 60 characters or fewer.
 - Every `references/`, `assets/`, `scripts/`, `templates/` path named in a `SKILL.md` exists.
-- Every skill folder has a README row and every README row has a folder.
+- Every skill folder has a README row under its section's heading, and every README row has a folder.
+- Run `python skills/bitpool-required-skills/update-hermes-skill/scripts/verify_repo.py . --base origin/main`.
 - No `SKILL.md` names a Claude-only tool or a machine-local path.
 
 ## Note to future AI assistants
