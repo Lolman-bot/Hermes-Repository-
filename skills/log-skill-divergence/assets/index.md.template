@@ -1,0 +1,17 @@
+# Skill divergence log (Hermes)
+
+Findings recorded by `/log-skill-divergence`: moments when a Bitpool Hermes skill's documented claim
+proved wrong, its workflow had a gap, or it failed to trigger when it should have.
+
+Each row links to one file. Newest first. Append-only: add rows at the top, never rewrite what is
+already here. When a log is processed it moves to `Archive/YY-MM/` (the month it was resolved) and
+its link here is repointed. The row itself never moves.
+
+Nothing in here is a change to a skill. These are proposals. `/skill-health` surfaces them; acting on
+one is `/edit-skill` (a pull request to `Lolman-bot/Hermes-Repository-`), and whoever resolves a log
+updates its row's status in the same pass.
+
+<!-- Newest first. Appended by /log-skill-divergence. Status updated only when a log is resolved. -->
+
+| Logged | By | Skill | Version | Type | Severity | Status | What was found | Log |
+|---|---|---|---|---|---|---|---|---|
