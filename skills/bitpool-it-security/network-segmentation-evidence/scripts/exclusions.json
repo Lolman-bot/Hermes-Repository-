@@ -1,0 +1,26 @@
+{
+  "_comment": "Accounts deliberately out of scope for network evidence. An excluded account is reported as a stated exclusion with its reason, NOT as an unsurveyed gap. Anything in the Organization that is neither surveyed nor listed here is a finding.",
+  "excluded_accounts": [
+    {
+      "id": "058264495749",
+      "name": "Archera GRI 2",
+      "reason": "Third-party billing connection (Archera reserved-instance optimisation). Vendor-operated, holds no Bitpool workload or data.",
+      "decided": "2026-09-01",
+      "decided_by": "Eric Sharp"
+    },
+    {
+      "id": "038989755598",
+      "name": "Archera GRI 74",
+      "reason": "Third-party billing connection (Archera reserved-instance optimisation). Vendor-operated, holds no Bitpool workload or data.",
+      "decided": "2026-09-01",
+      "decided_by": "Eric Sharp"
+    },
+    {
+      "id": "601669030283",
+      "name": "Archera GRI 3686",
+      "reason": "Third-party billing connection (Archera reserved-instance optimisation). Vendor-operated, holds no Bitpool workload or data.",
+      "decided": "2026-09-01",
+      "decided_by": "Eric Sharp"
+    }
+  ]
+}
