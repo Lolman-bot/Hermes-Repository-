@@ -1,0 +1,161 @@
+{
+  "_fixture": "SYNTHETIC test fixture for generate_baseline.py. NOT Microsoft Settings Catalog data. The keys are real settingDefinitionIds taken from the 2026-09-24 dump so the fixture joins against real-shaped policies, and the bodies are shaped like Graph deviceManagementConfigurationSettingDefinition objects, but every displayName is invented and prefixed SYNTHETIC so no label here can be mistaken for, or cited as, real catalog text. Deliberate misses: device_vendor_msft_laps_policies_passwordcomplexity lists options _1 to _4 only (the dump carries _7), and the id in _unresolved has no body. Keys beginning with an underscore are bookkeeping, never definitions.",
+  "_unresolved": [
+    "device_vendor_msft_laps_policies_postauthenticationresetdelay"
+  ],
+  "com.apple.applicationaccess_allowaccountmodification": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "com.apple.applicationaccess_allowaccountmodification",
+    "name": "allowAccountModification",
+    "displayName": "SYNTHETIC Allow Account Modification",
+    "description": "SYNTHETIC fixture body - not catalog data.",
+    "defaultOptionId": "com.apple.applicationaccess_allowaccountmodification_true",
+    "options": [
+      {
+        "itemId": "com.apple.applicationaccess_allowaccountmodification_false",
+        "name": "False",
+        "displayName": "SYNTHETIC Blocked",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 0
+        }
+      },
+      {
+        "itemId": "com.apple.applicationaccess_allowaccountmodification_true",
+        "name": "True",
+        "displayName": "SYNTHETIC Allowed",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "com.apple.applicationaccess_com.apple.applicationaccess": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition",
+    "id": "com.apple.applicationaccess_com.apple.applicationaccess",
+    "name": "com.apple.applicationaccess",
+    "displayName": "SYNTHETIC Restrictions group",
+    "description": "SYNTHETIC fixture body - a group is a container and never earns a row."
+  },
+  "com.apple.extensiblesso_urls": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition",
+    "id": "com.apple.extensiblesso_urls",
+    "name": "URLs",
+    "displayName": "SYNTHETIC SSO URLs",
+    "description": "SYNTHETIC fixture body - not catalog data."
+  },
+  "device_vendor_msft_laps_policies_administratoraccountname": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition",
+    "id": "device_vendor_msft_laps_policies_administratoraccountname",
+    "name": "AdministratorAccountName",
+    "displayName": "SYNTHETIC Administrator Account Name",
+    "description": "SYNTHETIC fixture body - not catalog data."
+  },
+  "device_vendor_msft_laps_policies_backupdirectory": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "device_vendor_msft_laps_policies_backupdirectory",
+    "name": "BackupDirectory",
+    "displayName": "SYNTHETIC Backup Directory",
+    "description": "SYNTHETIC fixture body - not catalog data.",
+    "defaultOptionId": "device_vendor_msft_laps_policies_backupdirectory_0",
+    "options": [
+      {
+        "itemId": "device_vendor_msft_laps_policies_backupdirectory_0",
+        "name": "Disabled",
+        "displayName": "SYNTHETIC Backup disabled",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 0
+        }
+      },
+      {
+        "itemId": "device_vendor_msft_laps_policies_backupdirectory_1",
+        "name": "AzureAD",
+        "displayName": "SYNTHETIC Back up to the directory",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 1
+        }
+      },
+      {
+        "itemId": "device_vendor_msft_laps_policies_backupdirectory_2",
+        "name": "ActiveDirectory",
+        "displayName": "SYNTHETIC Back up on premises",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 2
+        }
+      }
+    ]
+  },
+  "device_vendor_msft_laps_policies_passphraselength": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition",
+    "id": "device_vendor_msft_laps_policies_passphraselength",
+    "name": "PassphraseLength",
+    "displayName": "SYNTHETIC Passphrase Length",
+    "description": "SYNTHETIC fixture body - not catalog data."
+  },
+  "device_vendor_msft_laps_policies_passwordcomplexity": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "device_vendor_msft_laps_policies_passwordcomplexity",
+    "name": "PasswordComplexity",
+    "displayName": "SYNTHETIC Password Complexity",
+    "description": "SYNTHETIC fixture body - deliberately lists no option for the value the dump carries.",
+    "defaultOptionId": "device_vendor_msft_laps_policies_passwordcomplexity_4",
+    "options": [
+      {
+        "itemId": "device_vendor_msft_laps_policies_passwordcomplexity_1",
+        "name": "Upper",
+        "displayName": "SYNTHETIC Complexity level 1",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 1
+        }
+      },
+      {
+        "itemId": "device_vendor_msft_laps_policies_passwordcomplexity_4",
+        "name": "All",
+        "displayName": "SYNTHETIC Complexity level 4",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
+          "value": 4
+        }
+      }
+    ]
+  },
+  "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingCollectionDefinition",
+    "id": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc",
+    "name": "desc",
+    "displayName": "SYNTHETIC Local group",
+    "description": "SYNTHETIC fixture body - not catalog data.",
+    "options": [
+      {
+        "itemId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc_administrators",
+        "name": "Administrators",
+        "displayName": "SYNTHETIC Administrators group",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "value": "S-1-5-32-544"
+        }
+      },
+      {
+        "itemId": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_desc_users",
+        "name": "Users",
+        "displayName": "SYNTHETIC Users group",
+        "optionValue": {
+          "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValue",
+          "value": "S-1-5-32-545"
+        }
+      }
+    ]
+  },
+  "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_users": {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition",
+    "id": "device_vendor_msft_policy_config_localusersandgroups_configure_groupconfiguration_accessgroup_users",
+    "name": "member",
+    "displayName": "SYNTHETIC Members",
+    "description": "SYNTHETIC fixture body - not catalog data."
+  }
+}
