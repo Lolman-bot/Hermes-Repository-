@@ -1,7 +1,7 @@
 ---
 name: skills-catalogue
 description: "Use when asked what Bitpool skills exist. Dated list."
-version: 1.1.1
+version: 1.1.2
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -39,8 +39,9 @@ Don't use for:
    first line of the reply.
 2. **Read `references/catalogue-snapshot.md`** with `read_file`. Never answer from memory. Done when
    read this run.
-3. **Default reply: the list.** The required skills, name + one line each, plus the mods section
-   (currently empty). Done when every entry in the snapshot's tables is accounted for.
+3. **Default reply: the list.** Every section's skills, grouped under their section name, name + one
+   line each, plus the mods section (currently empty). Done when every entry in the snapshot's
+   tables is accounted for.
 4. **Go narrower only if they asked.** If they named a job or a skill ("anything for reviewing a
    skill?", "/skills-catalogue install-mod"), skip the full list and name the matching skills with
    their slash commands — or say plainly that nothing in the snapshot matches. Steps 1 and 5 still
