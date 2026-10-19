@@ -1,0 +1,211 @@
+<!--
+  Graph batch send scaffold. Copy to <year>/<slug>/<slug>.html, fill in, publish the
+  same way as any other batch send (SKILL.md step 7) to <slug>-cdn.html. Sent via
+  /send-marketing-email's --csv mode, not SendGrid.
+
+  Token find-and-replace before drafting:
+    {{YEAR}}             -> e.g. 2026
+    {{SLUG}}              -> e.g. spring-promo
+    {{UTM_SOURCE}}        -> e.g. spring_promo_2026
+
+  Image URL bases -- resolve every one of these to its literal value THE MOMENT you
+  copy this template (see references/cdn-and-common-assets.md and SKILL.md step 4).
+  None of these {{...}} tokens should still exist as brace syntax in a real
+  campaign's <slug>.html -- they're fill-in-immediately shorthand, not a runtime
+  placeholder anything substitutes later:
+    {{COMMON_CDN}}/<file>     -> write https://cdn.bitpool.com/email/common/<file>
+                                  directly (already live -- the logo below is already
+                                  done this way, copy that pattern for any other
+                                  already-live common asset)
+    {{COMMON_LOCAL}}/<file>   -> write ../../Common%20resources/<file> directly (a
+                                  NEW common asset staged but not yet uploaded)
+    {{CAMPAIGN_LOCAL}}/<file> -> write email%20assets/<file> directly (LOCAL relative
+                                  path, draft only)
+    {{CAMPAIGN_CDN}}           -> https://cdn.bitpool.com/email/{{YEAR}}/{{SLUG}} --
+                                  you never write this by hand; only the step 7
+                                  publish rewrite produces it
+
+  Merge tokens: {{first_name}} below is filled per recipient from a CSV's
+  'first_name' column at send time (/send-marketing-email, --csv mode). Add more
+  {{column}} tokens here freely -- just make sure the CSV used at send time has a
+  matching column. Every row must have a non-empty value for every token the
+  template uses; the send script refuses to send a blank merge field.
+
+  UNSUBSCRIBE -- read this before choosing this template over SendGrid batch:
+  Graph's sendMail has no equivalent of SendGrid's ASM groups -- there is no
+  automatic unsubscribe-link generation or list suppression. The mailto: link below
+  is a manual convention only: someone has to actually read those emails and remove
+  the address from the next CSV. For a genuine marketing blast to an uninformed or
+  large list, where automatic suppression matters for compliance, use SendGrid batch
+  instead (batch-template.html + SendGrid UI) -- that's the path with real
+  list-management behind it. This Graph batch template is the right choice for
+  smaller, already-informed lists (existing customers, partners, event registrants)
+  where a reply-to-unsubscribe convention plus manual list maintenance is acceptable.
+  See send-marketing-email's references/sending-and-guards.md for the full picture.
+
+  IMPORTANT: a local relative path renders for YOU and nobody else. SKILL.md step 6
+  greps this file for local path tokens before it goes anywhere near a send.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="x-apple-disable-message-reformatting"/>
+  <meta name="color-scheme" content="light"/>
+  <meta name="supported-color-schemes" content="light"/>
+  <title>[SUBJECT LINE]</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f4f6f8; }
+    a { text-decoration: none; }
+
+    @media screen and (max-width: 620px) {
+      .container { width: 100% !important; }
+      .px-mobile { padding-left: 28px !important; padding-right: 28px !important; }
+      .hero-title { font-size: 34px !important; line-height: 1.1 !important; }
+      .body-text { font-size: 16px !important; }
+      .hide-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f6f8; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
+
+  <!-- Preview text (hidden) -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#f4f6f8;">
+    [PREVIEW TEXT]
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" class="container" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(11,18,24,0.08);">
+
+          <!-- HERO -->
+          <tr>
+            <td style="padding:0; position:relative; background-color:#0b1218;">
+              <div style="position:relative; background-image: linear-gradient(180deg, rgba(11,18,24,0.15) 0%, rgba(11,18,24,0.20) 35%, rgba(11,18,24,0.70) 100%), url('{{CAMPAIGN_LOCAL}}/hero_{{SLUG}}.jpg'); background-size: cover; background-position: center; min-height:340px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="min-height:340px;">
+                  <tr>
+                    <td style="padding:36px 44px 44px 44px;" class="px-mobile">
+
+                      <!-- Logo lockup -- always the real common CDN URL, never a
+                           local copy per campaign -->
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td style="vertical-align:middle;">
+                            <img src="https://cdn.bitpool.com/email/common/bitpool_logo.png" width="140" height="42" alt="Bitpool" style="display:block; border:0; width:140px; height:42px;"/>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <div style="height:90px; line-height:90px; font-size:1px;">&nbsp;</div>
+
+                      <h1 class="hero-title" style="margin:0; font-family:'Inter',sans-serif; font-weight:300; font-size:42px; line-height:1.08; letter-spacing:-0.02em; color:#ffffff;">
+                        [HEADLINE with <strong style="color:#00ADEF; font-weight:700;">one bold-cyan phrase</strong>.]
+                      </h1>
+
+                      <p style="margin:18px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:15px; line-height:1.55; color:#aab6c2; max-width:430px;">
+                        [Sub-headline / one line supporting the headline.]
+                      </p>
+
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td class="px-mobile" style="padding:48px 56px 16px 56px; background-color:#ffffff;">
+              <p style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:500; font-size:11px; letter-spacing:0.2em; color:#00ADEF; text-transform:uppercase;">
+                [EYEBROW]
+              </p>
+
+              <p class="body-text" style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                Hi {{first_name}} — [opening line].
+              </p>
+
+              <p class="body-text" style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                [body paragraph. <strong style="color:#00ADEF; font-weight:700; font-style:normal;">Bold cyan</strong> replaces italics for emphasis — never <em>.]
+              </p>
+
+              <a href="[CTA URL]?utm_source={{UTM_SOURCE}}" style="display:inline-block; padding:14px 28px; background-color:#00ADEF; color:#0b1218; font-family:'Inter',sans-serif; font-weight:600; font-size:14px; letter-spacing:0.01em; border-radius:6px;">
+                [CTA label] &rarr;
+              </a>
+            </td>
+          </tr>
+
+          <!-- SIGNATURE — standard Bitpool signature (SKILL.md step 4.5). Ask the
+               user first: if they said no signature, delete the name/role/contact
+               <td> below (keep the logo <td> if it should stand alone, or delete
+               the whole row). Drop the contact <p> if neither email nor phone was
+               given. -->
+          <tr>
+            <td class="px-mobile" style="padding:32px 56px 48px 56px; background-color:#ffffff;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <p style="margin:0; font-family:'Inter',sans-serif; font-weight:600; font-size:17px; color:#1B2732; letter-spacing:-0.01em;">[Sender name]</p>
+                    <p style="margin:3px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:13px; color:#6e7c8b; letter-spacing:0.01em;">[Sender role] &middot; Bitpool</p>
+                    <p style="margin:10px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:13px; color:#6e7c8b;">
+                      <a href="mailto:[sender email]" style="color:#00ADEF; text-decoration:none;">[sender email]</a>&nbsp;&middot;&nbsp;[sender phone]
+                    </p>
+                  </td>
+                  <td style="vertical-align:middle; text-align:right;" align="right">
+                    <img src="https://cdn.bitpool.com/email/common/bitpool_logo.png" width="140" height="42" alt="Bitpool" style="display:block; border:0; width:140px; height:42px;"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- FOOTER -- manual unsubscribe convention (mailto), not automatic
+               suppression. See the comment at the top of this file before using
+               this for a real list send. -->
+          <tr>
+            <td style="padding:0; background-color:#fafbfc; border-top:1px solid rgba(11,18,24,0.06);">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td class="px-mobile" style="padding:24px 56px;">
+                    <p style="margin:0 0 6px 0; font-family:'Inter',sans-serif; font-weight:500; font-size:11px; letter-spacing:0.18em; color:#00ADEF; text-transform:uppercase;">
+                      Bitpool &middot; Brisbane
+                    </p>
+                    <p style="margin:0; font-family:'Inter',sans-serif; font-weight:400; font-size:12px; line-height:1.55; color:#6e7c8b;">
+                      Boldly practical &amp; unapologetically real. Tomorrow&rsquo;s autonomy, <strong style="color:#00ADEF; font-weight:700; font-style:normal;">shipping today.</strong>
+                    </p>
+                    <p style="margin:14px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:11px; line-height:1.55; color:#aab6c2;">
+                      [why they're receiving this]. Not what you expected? Just reply — a real human reads everything.
+                    </p>
+                    <p style="margin:10px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:11px; line-height:1.55; color:#aab6c2;">
+                      <a href="mailto:marketing@bitpool.com?subject=Unsubscribe" style="color:#6e7c8b; text-decoration:underline;">Unsubscribe</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

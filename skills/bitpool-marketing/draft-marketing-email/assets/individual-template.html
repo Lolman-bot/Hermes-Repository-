@@ -1,0 +1,117 @@
+<!-- DRAFT — the logo below is already written as its real, final CDN URL
+     (https://cdn.bitpool.com/email/common/bitpool_logo.png) — it's already live and
+     never changes, so there's nothing to substitute or rewrite later. Any OTHER
+     already-live common asset you add works the same way: write the real
+     https://cdn.bitpool.com/email/common/<file> URL directly, never a literal
+     {{COMMON_CDN}} token — see SKILL.md step 4's token-substitution table.
+     {{CAMPAIGN_LOCAL}} (= email%20assets) and {{COMMON_LOCAL}}
+     (= ../../Common%20resources) are LOCAL relative paths for images not yet
+     uploaded: they preview for you, and for nobody else. Also resolve these to
+     their literal relative-path form immediately (e.g. "email%20assets/hero.jpg"),
+     never leave the {{...}} brace syntax in the actual file.
+     The publish step (SKILL.md step 7) rewrites both to their CDN equivalents
+     before this is sendable via /send-marketing-email. SKILL.md step 6 greps this
+     file for local path tokens before it's sendable — a local preview cannot tell
+     you whether a recipient will see these images, but the grep can.
+     This is a personal/individual send: no {{merge}} tokens, no unsubscribe
+     footer — hardcode the recipient's name directly. Recipient(s), From mailbox,
+     and Reply-To are captured in campaign.md, not in this file — send-marketing-email
+     asks for them again at send time.
+     This comment does not survive into the published version. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="x-apple-disable-message-reformatting"/>
+  <meta name="color-scheme" content="light"/>
+  <meta name="supported-color-schemes" content="light"/>
+  <title>[SUBJECT LINE]</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f4f6f8; }
+    a { text-decoration: none; }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f6f8; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f4f6f8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(11,18,24,0.08);">
+
+          <!-- LOGO — already the real common CDN URL, already live, never per-campaign -->
+          <tr>
+            <td style="padding:32px 44px 0 44px;">
+              <img src="https://cdn.bitpool.com/email/common/bitpool_logo.png" width="140" height="42" alt="Bitpool" style="display:block; border:0; width:140px; height:42px;"/>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="padding:28px 44px 8px 44px; background-color:#ffffff;">
+
+              <p style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                Hi [First Name],
+              </p>
+
+              <p style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                [opening line — this is a 1:1 send, write it like you're talking to
+                one person.]
+              </p>
+
+              <p style="margin:0 0 18px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                [body paragraph. <strong style="color:#00ADEF; font-weight:700; font-style:normal;">Bold cyan</strong> replaces italics for emphasis — never <em>.]
+              </p>
+
+              <!-- Optional campaign-specific image — only if relevant to a 1:1 send.
+                   {{CAMPAIGN_LOCAL}} while drafting; the publish step rewrites it. -->
+              <!--
+              <img src="{{CAMPAIGN_LOCAL}}/[file].png" width="512" alt="" style="display:block; border:0; width:100%; max-width:512px; border-radius:8px; margin:8px 0 18px 0;"/>
+              -->
+
+              <p style="margin:0 0 28px 0; font-family:'Inter',sans-serif; font-weight:400; font-size:17px; line-height:1.65; color:#1B2732;">
+                [closing line — invite a reply.]
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- SIGNATURE — standard Bitpool signature (SKILL.md step 4.5). Ask the
+               user first: if they said no signature, delete this whole <tr> rather
+               than leaving [bracket] placeholders in a sent email. Drop the contact
+               <p> entirely if neither email nor phone was given (delete just the
+               phone half, and its separator, if only email was given). No
+               unsubscribe footer, no SendGrid tags, no {{merge}} tokens — this is a
+               personal send; stripping the footer is mandatory, not optional. -->
+          <tr>
+            <td style="padding:8px 44px 36px 44px; background-color:#ffffff;">
+              <p style="margin:0; font-family:'Inter',sans-serif; font-weight:600; font-size:15px; color:#1B2732; letter-spacing:-0.01em;">[Sender name]</p>
+              <p style="margin:3px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:13px; color:#6e7c8b; letter-spacing:0.01em;">[Sender role] &middot; Bitpool</p>
+              <p style="margin:10px 0 0 0; font-family:'Inter',sans-serif; font-weight:400; font-size:13px; color:#6e7c8b;">
+                <a href="mailto:[sender email]" style="color:#00ADEF; text-decoration:none;">[sender email]</a>&nbsp;&middot;&nbsp;[sender phone]
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
