@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitpool × [CLIENT] — [Sector] Case Study</title>
+<link rel="icon" href="__LOGO__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --logo:url("__LOGO__");
+  --baclogo:url("__PARTNER_LOGO__");
+  --grant:url("__HEADSHOT__");
+  --bg:#ffffff; --bg-2:#f6f8fa; --bg-3:#eef2f6; --navy:#1B2732;
+  --ink:#1B2732; --ink-70:#44525f; --ink-50:#6e7c8b; --ink-30:#aab6c2; --text-strong:#0b1218;
+  --accent:#00ADEF; --accent-soft:#5cd0ff; --accent-deep:#007db0;
+  --hair:rgba(11,24,32,0.10); --hair-soft:rgba(11,24,32,0.06);
+  --grid-line:rgba(11,24,32,0.06); --grid-line-major:rgba(11,24,32,0.11);
+  --glow-1:rgba(0,173,239,0.30); --glow-2:rgba(0,173,239,0.17);
+  --beat-grade:linear-gradient(135deg,#ffffff 0%,#eef2f6 55%,#e3e9f0 100%);
+  --logo-filter:none;
+  --scroll-thumb:rgba(11,24,32,0.22); --scroll-thumb-hover:var(--accent);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --page-w:210mm; --page-h:297mm; --pad:18mm;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#dfe4ea; color:var(--ink);
+  font-weight:300; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding:34px 0 90px;
+}
+strong,.accent{color:var(--accent);font-weight:700;font-style:normal}
+::selection{background:rgba(0,173,239,.22)}
+*{scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:10px;border:3px solid transparent;background-clip:content-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-hover);border:3px solid transparent;background-clip:content-box}
+
+/* ===== PAGE ===== */
+.page{
+  position:relative; width:var(--page-w); min-height:var(--page-h);
+  margin:0 auto 30px; background:var(--bg); padding:var(--pad);
+  box-shadow:0 24px 70px rgba(11,24,32,.16),0 2px 6px rgba(11,24,32,.06);
+  overflow:hidden; display:flex; flex-direction:column;
+}
+.page::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-soft));z-index:5}
+.page-grid{
+  position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+  background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(120% 90% at 88% 8%,#000 0%,transparent 60%);
+  mask-image:radial-gradient(120% 90% at 88% 8%,#000 0%,transparent 60%);
+}
+.page>*{position:relative;z-index:1}
+
+/* ===== HEADER ===== */
+.doc-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:8mm}
+.lockup{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-weight:600;font-size:16px;letter-spacing:-.01em}
+.brand-mark{width:26px;height:26px;background:var(--logo) center/contain no-repeat;filter:var(--logo-filter);flex:none}
+.doc-tag{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-50)}
+.doc-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(0,173,239,.16)}
+.doc-tag .bar{width:1px;height:13px;background:var(--hair)}
+.client-chip{display:inline-flex;align-items:center;background:transparent;border:1px solid var(--hair);padding:5px 10px;border-radius:5px;letter-spacing:.18em}
+.client-chip .txt{font-weight:600;font-size:10.5px}
+
+/* ===== EYEBROW / HERO ===== */
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+.hero-title{font-size:39px;line-height:1.08;font-weight:200;letter-spacing:-.02em;color:var(--text-strong);margin:11px 0 14px;max-width:96%}
+.lead{font-size:14.5px;line-height:1.62;color:var(--ink-70);font-weight:300;max-width:97%}
+
+/* ===== FEATURE IMAGE (hero) ===== */
+.feature{
+  position:relative;border-radius:11px;overflow:hidden;
+  border:1px solid var(--hair);
+  box-shadow:0 22px 50px rgba(11,24,32,.16);
+  background:var(--bg-3);
+  padding-top:var(--ratio,52%);
+}
+.feature.bleed{
+  margin-left:calc(-1*var(--pad));
+  margin-right:calc(-1*var(--pad));
+  width:calc(100% + 2*var(--pad));
+  border-radius:0;border-left:none;border-right:none;
+  box-shadow:0 26px 56px rgba(11,24,32,.18);
+}
+.feature .img{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08);transition:transform 2.8s cubic-bezier(.2,.8,.2,1)}
+.feature.in .img{transform:scale(1)}
+.feature .clip{position:absolute;inset:0;clip-path:inset(0 100% 0 0);transition:clip-path 1.6s cubic-bezier(.2,.8,.2,1) .1s}
+.feature.in .clip{clip-path:inset(0 0 0 0)}
+.feature .clip>.img{position:absolute;inset:0}
+.feature .cap{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:14px;
+  padding:46px 24px 18px;
+  background:linear-gradient(0deg,rgba(8,14,19,.92) 0%,rgba(8,14,19,.66) 32%,rgba(8,14,19,.2) 64%,transparent 100%);
+  color:#fff;
+}
+.feature.bleed .cap{padding-left:var(--pad);padding-right:var(--pad)}
+.feature .cap .t{font-size:14px;font-weight:400;letter-spacing:.005em;line-height:1.4;max-width:74%;text-shadow:0 1px 14px rgba(0,0,0,.5)}
+.feature .cap .t b{color:var(--accent-soft);font-weight:700}
+.feature .cap .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#fff;white-space:nowrap;border:1px solid rgba(255,255,255,.4);padding:6px 11px;border-radius:5px;background:rgba(255,255,255,.08);backdrop-filter:blur(3px)}
+
+/* ===== HERO STATS ===== */
+.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--bg-2)}
+.hstats .cell{padding:15px 16px 16px;border-right:1px solid var(--hair);position:relative}
+.hstats .cell:last-child{border-right:none}
+.hstats .cell::before{content:"";position:absolute;top:0;left:0;width:0;height:2px;background:var(--accent);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.hstats .cell.in::before{width:34px}
+.hstats .v{font-size:30px;font-weight:200;letter-spacing:-.03em;color:var(--text-strong);line-height:1}
+.hstats .v .u{font-size:14px;font-weight:300;color:var(--accent);margin-left:2px}
+.hstats .k{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-50);margin-top:8px;line-height:1.4}
+
+/* ===== META ROW ===== */
+.metarow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:16px;border-top:1px solid var(--hair)}
+.metarow .m{padding:15px 18px 0 0;border-right:1px solid var(--hair-soft)}
+.metarow .m:last-child{border-right:none}
+.metarow .mk{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.metarow .mv{font-size:12px;font-weight:400;color:var(--ink);line-height:1.35}
+
+/* ===== SECTION ===== */
+.sec{margin-top:9mm}
+.sec-head{display:flex;align-items:center;gap:13px;margin-bottom:5mm}
+.sec-num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.1em}
+.sec-head h2{font-size:23px;font-weight:300;letter-spacing:-.015em;color:var(--text-strong);white-space:nowrap}
+.sec-head .rule{flex:1;height:1px;background:var(--hair)}
+.sec-head--stacked{flex-direction:column;align-items:stretch;gap:7px}
+.sec-head--stacked .top{display:flex;align-items:center;gap:11px}
+.sec-head--stacked .top .eyebrow{margin:0}
+.sec-head--stacked h2{font-size:25px}
+.sec-intro{font-size:13px;line-height:1.58;color:var(--ink-70);max-width:90%;margin-bottom:5mm}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.cards.four{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--bg-2);border:1px solid var(--hair);border-radius:9px;padding:15px 14px 16px;display:flex;flex-direction:column}
+.card .ico{width:31px;height:31px;border-radius:7px;background:#fff;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:11px}
+.card .ico svg{width:17px;height:17px}
+.card h3{font-size:13px;font-weight:600;color:var(--text-strong);letter-spacing:-.01em;margin-bottom:6px;line-height:1.25}
+.card p{font-size:11px;line-height:1.5;color:var(--ink-70)}
+
+/* numbered solution */
+.sol{display:grid;grid-template-columns:1fr 1fr;gap:13px 24px}
+.sol-item{display:flex;gap:14px;align-items:flex-start;padding:3px 0}
+.sol-item .n{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);flex:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;background:var(--bg-2)}
+.sol-item h3{font-size:13.5px;font-weight:600;color:var(--text-strong);margin-bottom:4px;letter-spacing:-.01em}
+.sol-item p{font-size:11.5px;line-height:1.5;color:var(--ink-70)}
+
+/* patterned beat (imageless) */
+.beat{position:relative;overflow:hidden;background:var(--beat-grade);border-radius:11px;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;text-align:center;min-height:150px;padding:34px 40px}
+.beat .grid{position:absolute;inset:0;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:30px 30px;-webkit-mask-image:radial-gradient(120% 120% at 30% 50%,#000,transparent 78%);mask-image:radial-gradient(120% 120% at 30% 50%,#000,transparent 78%)}
+.beat .glow{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,var(--glow-1),transparent 70%);filter:blur(6px)}
+.beat .glow.g1{left:-90px;top:-120px}
+.beat .glow.g2{right:-80px;bottom:-130px;background:radial-gradient(circle,var(--glow-2),transparent 70%)}
+.beat .bt{position:relative;z-index:1;font-size:21px;font-weight:200;letter-spacing:-.01em;color:var(--text-strong);line-height:1.35;max-width:80%}
+
+/* strategic value band */
+.sv-band{display:grid;grid-template-columns:1.02fr 1.05fr;gap:0;border:1px solid var(--hair);border-radius:11px;overflow:hidden;min-height:258px}
+.sv-photo{position:relative;overflow:hidden;background:var(--bg-3)}
+.sv-photo .img{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.09);transition:transform 2.8s cubic-bezier(.2,.8,.2,1)}
+.sv-band.in .sv-photo .img{transform:scale(1)}
+.sv-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 58%,rgba(246,248,250,.92) 100%)}
+.sv-photo .ovl{position:absolute;left:16px;bottom:15px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.4);padding:6px 11px;border-radius:5px;background:rgba(8,14,19,.45);backdrop-filter:blur(3px)}
+.sv-text{background:var(--bg-2);padding:16px 22px;display:flex;flex-direction:column;justify-content:center}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.bullets li{position:relative;padding-left:23px;font-size:12.5px;line-height:1.5;color:var(--ink-70)}
+.bullets li::before{content:"";position:absolute;left:0;top:7px;width:9px;height:9px;border-radius:2px;background:var(--accent);transform:rotate(45deg);box-shadow:0 0 0 3px rgba(0,173,239,.13)}
+
+/* quote */
+.quote{position:relative;background:var(--navy);color:#fff;border-radius:12px;padding:20px 28px 18px;overflow:hidden}
+.quote::after{content:"";position:absolute;right:-40px;top:-40px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,var(--glow-1),transparent 70%)}
+.quote .mark{font-size:66px;line-height:.6;color:var(--accent);font-weight:700;height:28px}
+.quote p{font-size:14px;line-height:1.5;font-weight:300;color:#eef2f6;position:relative;z-index:1;max-width:96%}
+.quote .byline{display:flex;align-items:center;gap:16px;margin-top:14px;position:relative;z-index:1}
+.quote .avatar{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:#fff;letter-spacing:.02em;border:2px solid rgba(255,255,255,.18);box-shadow:0 6px 18px rgba(0,0,0,.35);flex:none}
+.quote .name{font-weight:600;font-size:14px}
+.quote .role{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-30);margin-top:2px}
+
+/* cta */
+.cta-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px;padding:14px 22px;border:1px solid var(--hair);border-radius:10px;background:var(--bg-2)}
+.cta-q{font-size:15px;font-weight:300;color:var(--text-strong)}
+.cta-q b{color:var(--accent);font-weight:700}
+.cta-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:11px 18px;border-radius:7px;letter-spacing:.01em;transition:background .25s}
+.cta-link:hover{background:var(--accent-deep)}
+.cta-link svg{width:15px;height:15px}
+
+/* footer */
+.doc-foot{margin-top:auto;padding-top:9mm;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-50)}
+.doc-foot .fl{display:flex;align-items:center;gap:8px}
+.doc-foot .cube{width:14px;height:14px;background:var(--logo) center/contain no-repeat}
+.doc-foot .pg strong{color:var(--accent);font-weight:600}
+
+/* BAC logo + headshot */
+.bac-mark{background:var(--baclogo) center/contain no-repeat;display:inline-block;flex:none}
+.client-chip{padding:5px 10px}
+.chip-bac{width:46px;height:13px}
+.metarow .mv{display:flex;align-items:center;gap:11px;min-height:17px}
+.metarow .mv .bac-mark{width:56px;height:16px}
+.metarow .mv span:last-child{color:var(--ink-70)}
+.avatar.photo{background:var(--grant) center/cover;background-size:cover;font-size:0}
+.quote-bac{position:absolute;top:22px;right:26px;width:92px;height:26px;z-index:2;opacity:.96}
+
+/* ===== OUTCOME DASHBOARD ===== */
+.odash{display:flex;flex-direction:column;gap:14px;flex:1}
+.perf-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.perf{position:relative;background:var(--bg-2);border:1px solid var(--hair);border-radius:13px;padding:22px 20px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden}
+.perf::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-soft))}
+.perf .ptag{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.ring{position:relative;width:148px;height:148px;margin:6px 0 11px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .trk{fill:none;stroke:var(--hair);stroke-width:9}
+.ring .prg{fill:none;stroke:var(--accent);stroke-width:9;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset 1.7s cubic-bezier(.2,.8,.2,1)}
+.ring .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .num{font-size:42px;font-weight:200;letter-spacing:-.03em;color:var(--text-strong);line-height:1}
+.ring .num .u{font-size:20px;color:var(--accent);font-weight:300;margin-left:1px}
+.ring .rl{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-50);margin-top:5px}
+.perf h3{font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px;letter-spacing:-.01em}
+.perf p{font-size:11.5px;line-height:1.46;color:var(--ink-70);max-width:94%}
+
+.impact-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.impact{position:relative;background:var(--bg-2);border:1px solid var(--hair);border-radius:12px;padding:18px 16px 17px;display:flex;flex-direction:column;overflow:hidden}
+.impact::after{content:"";position:absolute;top:0;left:0;width:0;height:2px;background:var(--accent);transition:width 1.1s cubic-bezier(.2,.8,.2,1) .2s}
+.impact.in::after{width:30px}
+.impact .ico{width:31px;height:31px;border-radius:7px;background:#fff;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.impact .ico svg{width:17px;height:17px}
+.impact .big{font-size:40px;font-weight:200;letter-spacing:-.035em;color:var(--text-strong);line-height:1;margin-top:auto}
+.impact .big .u{font-size:17px;color:var(--accent);font-weight:300;margin-left:2px}
+.impact h3{font-size:12.5px;font-weight:600;color:var(--text-strong);margin-top:9px;letter-spacing:-.01em;line-height:1.2}
+.impact p{font-size:10.5px;line-height:1.46;color:var(--ink-70);margin-top:5px}
+.impact.q{align-items:flex-start}
+.impact.q .qbody{margin-top:auto}
+
+.beat.bleed{margin-left:calc(-1*var(--pad));margin-right:calc(-1*var(--pad));width:calc(100% + 2*var(--pad));border-radius:0;border-left:none;border-right:none}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity 1.3s cubic-bezier(.2,.8,.2,1),transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.13s}.d3{transition-delay:.2s}.d4{transition-delay:.27s}.d5{transition-delay:.34s}
+
+/* toolbar */
+.toolbar{position:fixed;right:22px;bottom:22px;z-index:50;display:inline-flex;align-items:center;gap:9px;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:12px 18px;font-family:'Inter';font-size:13px;font-weight:600;letter-spacing:.01em;cursor:pointer;box-shadow:0 10px 30px rgba(11,24,32,.3);transition:transform .2s}
+.toolbar:hover{transform:translateY(-2px)}
+.toolbar .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(0,173,239,.2)}
+
+/* print */
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff;padding:0}
+  .page{margin:0;box-shadow:none;page-break-after:always;width:210mm;height:297mm;min-height:297mm}
+  .page:last-of-type{page-break-after:auto}
+  .toolbar{display:none}
+  .rv{opacity:1!important;transform:none!important}
+  .feature .img,.sv-photo .img{transform:scale(1)!important}
+  .feature .clip{clip-path:inset(0 0 0 0)!important}
+  .hstats .cell::before{width:34px!important}
+}
+@media(max-width:740px){
+  body{padding:12px 0 80px}
+  :root{--page-w:100%;--pad:20px}
+  .page{width:calc(100% - 20px);min-height:0}
+  .hero-title{font-size:30px}
+  .cards,.cards.four,.sol,.sv-band,.hstats,.metarow{grid-template-columns:1fr}
+  .sec-head h2{white-space:normal}
+  .feature .cap .t{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══ PAGE 1 · COVER ══╗ -->
+<section class="page">
+  <div class="page-grid"></div>
+  <header class="doc-head rv">
+    <a class="lockup" href="#"><span class="brand-mark"></span>Bitpool</a>
+    <div class="doc-tag"><span class="dot"></span>Case Study<span class="bar"></span><span class="client-chip"><span class="bac-mark chip-bac"></span></span></div>
+  </header>
+
+  <div class="eyebrow rv d1">[EYEBROW — sector / location]</div>
+  <h1 class="hero-title rv d1">[HEADLINE with <strong>bold cyan</strong> emphasis on 1–2 key phrases]</h1>
+  <p class="lead rv d2">[LEAD — 3–4 sentences: the situation, what Bitpool + the partner did, the shift. Boldly practical voice.]</p>
+
+  <div class="feature bleed rv d2" style="--ratio:48%;margin-top:16px">
+    <div class="clip"><div class="img" style="background-image:url('__IMG_HERO__')"></div></div>
+    <div class="cap">
+      <div class="t">[HERO CAPTION — one line, <b>cyan</b> on a key phrase]</div>
+      <div class="tag">Site Overview</div>
+    </div>
+  </div>
+
+  <div class="hstats rv d3" style="margin-top:16px">
+    <div class="cell"><div class="v" data-count="10" data-suffix="yrs">10<span class="u">yrs</span></div><div class="k">Of building data,<br>down to the rack</div></div>
+    <div class="cell"><div class="v" data-count="100" data-suffix="s">100<span class="u">s</span></div><div class="k">Racks monitored<br>live, all at once</div></div>
+    <div class="cell"><div class="v" data-count="14" data-suffix="days">14<span class="u">days</span></div><div class="k">From idle system<br>to daily use</div></div>
+    <div class="cell"><div class="v">A<span class="u">+</span>B</div><div class="k">Power streams<br>kept in balance</div></div>
+  </div>
+
+  <div class="metarow rv d4">
+    <div class="m"><div class="mk">Client</div><div class="mv">[Client / end customer]</div></div>
+    <div class="m"><div class="mk">Sector</div><div class="mv">[Sector]</div></div>
+    <div class="m"><div class="mk">Delivered with</div><div class="mv"><span class="bac-mark"></span><span>[Location]</span></div></div>
+    <div class="m"><div class="mk">Platform</div><div class="mv">[Bitpool product / platform]</div></div>
+  </div>
+
+  <footer class="doc-foot">
+    <span class="fl"><span class="cube"></span>Bitpool · Case Study</span>
+    <span class="pg">bitpool.com&nbsp;&nbsp;&nbsp;<strong>01</strong> / 05</span>
+  </footer>
+</section>
+
+<!-- ╔══ PAGE 2 · CHALLENGE + SERVER HALL HERO ══╗ -->
+<section class="page">
+  <div class="page-grid"></div>
+  <header class="doc-head">
+    <a class="lockup" href="#"><span class="brand-mark"></span>Bitpool</a>
+    <div class="doc-tag"><span class="dot"></span>Case Study<span class="bar"></span><span class="client-chip"><span class="bac-mark chip-bac"></span></span></div>
+  </header>
+
+  <div class="sec" style="margin-top:2mm">
+    <div class="sec-head rv"><span class="sec-num">01</span><h2>The Challenge</h2><span class="rule"></span></div>
+    <p class="sec-intro rv d1">[CHALLENGE intro — set up the problem in 1–2 sentences.]</p>
+    <div class="cards four">
+      <div class="card rv d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/><path d="M8 7h.01M8 17h.01"/></svg></div><h3>[Challenge 1 — title]</h3><p>[Challenge 1 — 1 sentence]</p></div>
+      <div class="card rv d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.8-.9 1.4M12 16.5h.01"/></svg></div><h3>[Challenge 2 — title]</h3><p>[Challenge 2 — 1 sentence]</p></div>
+      <div class="card rv d3"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>[Challenge 3 — title]</h3><p>[Challenge 3 — 1 sentence]</p></div>
+      <div class="card rv d4"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.8 2.5 17a1.5 1.5 0 0 0 1.3 2.3h16.4A1.5 1.5 0 0 0 21.5 17L13.7 3.8a1.5 1.5 0 0 0-2.6 0Z"/><path d="M12 9v4M12 17h.01"/></svg></div><h3>[Challenge 4 — title]</h3><p>[Challenge 4 — 1 sentence]</p></div>
+    </div>
+  </div>
+
+  <div class="feature bleed rv" style="--ratio:62%;margin-top:auto">
+    <div class="clip"><div class="img" style="background-image:url('__IMG_A__')"></div></div>
+    <div class="cap">
+      <div class="t">[IMAGE A CAPTION — <b>cyan</b> on a key phrase]</div>
+      <div class="tag">Server Hall</div>
+    </div>
+  </div>
+
+  <footer class="doc-foot">
+    <span class="fl"><span class="cube"></span>Bitpool · Case Study</span>
+    <span class="pg">bitpool.com&nbsp;&nbsp;&nbsp;<strong>02</strong> / 05</span>
+  </footer>
+</section>
+
+<!-- ╔══ PAGE 3 · SOLUTION + WHOLE-SITE HERO ══╗ -->
+<section class="page">
+  <div class="page-grid"></div>
+  <header class="doc-head">
+    <a class="lockup" href="#"><span class="brand-mark"></span>Bitpool</a>
+    <div class="doc-tag"><span class="dot"></span>Case Study<span class="bar"></span><span class="client-chip"><span class="bac-mark chip-bac"></span></span></div>
+  </header>
+
+  <div class="sec" style="margin-top:2mm">
+    <div class="sec-head rv"><span class="sec-num">02</span><h2>The Solution</h2><span class="rule"></span></div>
+    <p class="sec-intro rv d1">[SOLUTION intro — how the engagement started and the key shift.]</p>
+    <div class="sol">
+      <div class="sol-item rv d1"><span class="n">01</span><div><h3>[Solution 1 — title]</h3><p>[Solution 1 — 1–2 sentences]</p></div></div>
+      <div class="sol-item rv d2"><span class="n">02</span><div><h3>[Solution 2 — title]</h3><p>[Solution 2 — 1–2 sentences]</p></div></div>
+      <div class="sol-item rv d2"><span class="n">03</span><div><h3>[Solution 3 — title]</h3><p>[Solution 3 — 1–2 sentences]</p></div></div>
+      <div class="sol-item rv d3"><span class="n">04</span><div><h3>[Solution 4 — title]</h3><p>[Solution 4 — 1–2 sentences]</p></div></div>
+    </div>
+  </div>
+
+  <div class="feature bleed rv" style="--ratio:64%;margin-top:auto">
+    <div class="clip"><div class="img" style="background-image:url('__IMG_B__')"></div></div>
+    <div class="cap">
+      <div class="t">[IMAGE B CAPTION — <b>cyan</b> on a key phrase]</div>
+      <div class="tag">Whole-Site View</div>
+    </div>
+  </div>
+
+  <footer class="doc-foot">
+    <span class="fl"><span class="cube"></span>Bitpool · Case Study</span>
+    <span class="pg">bitpool.com&nbsp;&nbsp;&nbsp;<strong>03</strong> / 05</span>
+  </footer>
+</section>
+
+<!-- ╔══ PAGE 4 · OUTCOME DASHBOARD ══╗ -->
+<section class="page">
+  <div class="page-grid"></div>
+  <header class="doc-head">
+    <a class="lockup" href="#"><span class="brand-mark"></span>Bitpool</a>
+    <div class="doc-tag"><span class="dot"></span>Case Study<span class="bar"></span><span class="client-chip"><span class="bac-mark chip-bac"></span></span></div>
+  </header>
+
+  <div class="sec" style="margin-top:2mm;margin-bottom:0">
+    <div class="sec-head sec-head--stacked rv">
+      <div class="top"><span class="sec-num">03</span><span class="eyebrow" style="margin:0">The Outcome</span><span class="rule"></span></div>
+      <h2>Insight, efficiency &amp; everyday use</h2>
+    </div>
+    <p class="sec-intro rv d1" style="margin-bottom:0">[OUTCOME intro — one line tying results to everyday performance.]</p>
+  </div>
+
+  <div class="odash" style="margin-top:6mm">
+    <!-- performance rings -->
+    <div class="perf-row">
+      <div class="perf rv d1">
+        <div class="ptag">Performance</div>
+        <div class="ring">
+          <svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52"/><circle class="prg" cx="60" cy="60" r="52" data-pct="72"/></svg>
+          <div class="ctr"><div class="num" data-count="72" data-suffix="%">0<span class="u">%</span></div><div class="rl">[ring 1 label]</div></div>
+        </div>
+        <h3>[Perf ring 1 — title]</h3>
+        <p>[Perf ring 1 — 1 sentence]</p>
+      </div>
+      <div class="perf rv d2">
+        <div class="ptag">Performance</div>
+        <div class="ring">
+          <svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52"/><circle class="prg" cx="60" cy="60" r="52" data-pct="85"/></svg>
+          <div class="ctr"><div class="num" data-count="85" data-suffix="%">0<span class="u">%</span></div><div class="rl">[ring 2 label]</div></div>
+        </div>
+        <h3>[Perf ring 2 — title]</h3>
+        <p>[Perf ring 2 — 1 sentence]</p>
+      </div>
+      <div class="perf rv d3">
+        <div class="ptag">Performance</div>
+        <div class="ring">
+          <svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52"/><circle class="prg" cx="60" cy="60" r="52" data-pct="98"/></svg>
+          <div class="ctr"><div class="num" data-count="98" data-suffix="%">0<span class="u">%</span></div><div class="rl">[ring 3 label]</div></div>
+        </div>
+        <h3>[Perf ring 3 — title]</h3>
+        <p>[Perf ring 3 — 1 sentence]</p>
+      </div>
+    </div>
+
+    <!-- impact metrics -->
+    <div class="impact-row">
+      <div class="impact rv d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/><path d="m7 11 2.5 2.5L14 9"/></svg></div>
+        <div class="big">Daily</div>
+        <h3>[Impact 1 — title]</h3>
+        <p>[Impact 1 — 1 sentence]</p>
+      </div>
+      <div class="impact rv d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <div class="big" data-count="14" data-suffix="days">0<span class="u">days</span></div>
+        <h3>[Impact 2 — title]</h3>
+        <p>[Impact 2 — 1 sentence]</p>
+      </div>
+      <div class="impact rv d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/><path d="M8 7h.01M8 17h.01"/></svg></div>
+        <div class="big">100<span class="u">s</span></div>
+        <h3>[Impact 3 — title]</h3>
+        <p>[Impact 3 — 1 sentence]</p>
+      </div>
+      <div class="impact q rv d4">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 4.4 3.4 7.6 8 9 4.6-1.4 8-4.6 8-9V7l-8-4Z"/><path d="M9 12h6M12 9v6"/></svg></div>
+        <div class="qbody"><h3>[Impact 4 — title]</h3><p>[Impact 4 — 1–2 sentences]</p></div>
+      </div>
+    </div>
+
+    <!-- closing beat -->
+    <div class="beat bleed rv" style="margin-top:auto;min-height:108px">
+      <div class="grid"></div><div class="glow g1"></div><div class="glow g2"></div>
+      <div class="bt">[CLOSING line — <strong>cyan</strong> on the payoff phrase.]</div>
+    </div>
+  </div>
+
+  <footer class="doc-foot">
+    <span class="fl"><span class="cube"></span>Bitpool · Case Study</span>
+    <span class="pg">bitpool.com&nbsp;&nbsp;&nbsp;<strong>04</strong> / 05</span>
+  </footer>
+</section>
+
+<!-- ╔══ PAGE 5 · STRATEGIC VALUE + PARTNER ══╗ -->
+<section class="page">
+  <div class="page-grid"></div>
+  <header class="doc-head">
+    <a class="lockup" href="#"><span class="brand-mark"></span>Bitpool</a>
+    <div class="doc-tag"><span class="dot"></span>Case Study<span class="bar"></span><span class="client-chip"><span class="bac-mark chip-bac"></span></span></div>
+  </header>
+
+  <div class="sec" style="margin-top:2mm">
+    <div class="sv-band rv">
+      <div class="sv-photo">
+        <div class="img" style="background-image:url('__IMG_C__')"></div>
+        <div class="ovl">Mechanical Plant</div>
+      </div>
+      <div class="sv-text">
+        <div class="sec-head" style="margin-bottom:4mm"><span class="sec-num">04</span><h2 style="color:var(--accent)">Strategic Value</h2><span class="rule"></span></div>
+        <ul class="bullets">
+          <li>[Strategic value 1]</li>
+          <li>[Strategic value 2]</li>
+          <li>[Strategic value 3]</li>
+          <li>[Strategic value 4]</li>
+          <li>[Strategic value 5]</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:4mm">
+    <div class="sec-head rv"><span class="sec-num">05</span><h2>Partner Perspective</h2><span class="rule"></span></div>
+    <div class="quote rv d1">
+      <span class="bac-mark quote-bac"></span>
+      <div class="mark">&ldquo;</div>
+      <p>[PARTNER QUOTE — 3–5 sentences in the partner’s own voice.]</p>
+      <div class="byline">
+        <div class="avatar photo"></div>
+        <div class="who"><div class="name">[Partner contact name]</div><div class="role">[Partner org · location]</div></div>
+      </div>
+    </div>
+    <div class="cta-row rv d2">
+      <span class="cta-q">Want to know more? <b>Let's talk.</b></span>
+      <a class="cta-link" href="https://bitpool.com">Talk to us <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+    </div>
+  </div>
+
+  <footer class="doc-foot">
+    <span class="fl"><span class="cube"></span>Bitpool · Case Study</span>
+    <span class="pg">bitpool.com&nbsp;&nbsp;&nbsp;<strong>05</strong> / 05</span>
+  </footer>
+</section>
+
+<button class="toolbar" onclick="window.print()"><span class="dot"></span>Save as PDF</button>
+
+<script>
+function setFinal(el){el.innerHTML=(el.dataset.prefix||'')+el.dataset.count+(el.dataset.suffix?'<span class="u">'+el.dataset.suffix+'</span>':'')}
+function setZero(el){el.innerHTML=(el.dataset.prefix||'')+'0'+(el.dataset.suffix?'<span class="u">'+el.dataset.suffix+'</span>':'')}
+const counters=[...document.querySelectorAll('[data-count]')];
+const rings=[...document.querySelectorAll('.ring .prg')];
+function drawRing(prg){const pct=+prg.dataset.pct;prg.style.strokeDashoffset=327*(1-pct/100)}
+if(!window.matchMedia('print').matches) counters.forEach(setZero);
+window.addEventListener('beforeprint',()=>{counters.forEach(setFinal);rings.forEach(drawRing)});
+
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    el.classList.add('in');
+    if(el.classList.contains('hstats')) el.querySelectorAll('.cell').forEach(c=>c.classList.add('in'));
+    if(el.classList.contains('perf')){const prg=el.querySelector('.prg'); if(prg) drawRing(prg);}
+    if(el.dataset && el.dataset.count!==undefined) runCount(el);
+    io.unobserve(el);
+  });
+},{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv,.feature,.sv-band,.hstats,.perf,.impact,[data-count]').forEach(el=>io.observe(el));
+
+function runCount(el){
+  const target=+el.dataset.count, suf=el.dataset.suffix||'', pre=el.dataset.prefix||'';
+  const dur=1300, t0=performance.now();
+  function step(t){
+    const p=Math.min((t-t0)/dur,1), e=1-Math.pow(1-p,3);
+    el.innerHTML=pre+Math.round(target*e)+(suf?'<span class="u">'+suf+'</span>':'');
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>
