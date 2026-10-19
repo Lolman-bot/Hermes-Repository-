@@ -50,6 +50,35 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | `bitpool-design-system` | How Bitpool looks — the six non-negotiables, light and dark tokens, components, the cube logo and a starter HTML template — for any page, deck, report or visual. |
 | `bitpool-search` | A drop-in, on-brand predictive search box (typeahead, cyan highlights, keyboard control) for Bitpool pages with lists or tables. |
 
+## Skills — support (`skills/bitpool-support/`, building-automation engineering and hands-on Bitpool Cloud work)
+
+| Skill | What it does |
+|---|---|
+| `bacnet-diagnostics` | Diagnoses and fixes BACnet network alerts (MS/TP, BACnet/IP, BBMD, traffic rates, TrendLogs) and ASHRAE 135-2008 errata from vendor-confirmed reference entries. |
+| `bitpool-dashboard-builder` | Builds, extends or rearranges Bitpool Cloud dashboards by driving a signed-in browser, with permission gates on every write. |
+| `bitpool-hvac-schematics` | Builds self-contained, on-brand HTML BMS/SCADA graphics for HVAC and central plant with live data chips, animated flow and alarms. |
+| `bitpool-report-builder` | Builds paginated Bitpool Cloud reports (wizard, canvas, data sources, Preview PDF) by driving a signed-in browser, with permission gates on every write. |
+| `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template. |
+
+## Skills — prototyping (`skills/bitpool-prototyping/`, rubric-driven generate → evaluate → review design loop)
+
+| Skill | What it does |
+|---|---|
+| `loop-engineering-start` | Entry point to the rubric-scored generate → evaluate → review loop: confirms intent, sets up, resumes or archives `.loop-engineering/`, and hands off to `/project-context`. |
+| `project-context` | Captures the user's project brief verbatim and copies their reference files into `.loop-engineering/` before any criteria are set. |
+| `generate-rubric` | Interviews to sharpen the brief, then builds 4-6 weighted criteria with observable 0-10 anchors, optional gates, a threshold and a pass cap in `rubric.json`. |
+| `design-generation` | Produces the next versioned design and its attribute rationale against the rubric anchors and review directives, without grading itself. |
+| `design-evaluation` | Scores a design blind against the anchors with evidence, calibrates against history, logs the pass and routes to finish, review or a cap check-in. |
+| `review-solution` | Checks in with the user, then analyses scoring history at a rigour tier matched to the number of candidates and writes 3-6 evidence-backed directives for the next pass. |
+
+## Skills — images and videos (`skills/bitpool-images-and-videos/`, Gemini / Veo prompt-writing for Bitpool visuals)
+
+| Skill | What it does |
+|---|---|
+| `bitpool-3d-image` | Writes Gemini image-to-image prompts that turn an attached photo, plan or diagram into a Bitpool archviz render, with an optional HTML mockup or handoff page. |
+| `bitpool-cinematic-photo` | Writes Gemini prompts for Bitpool marketing stills (towers, plant rooms, data centres, cutaways, exploded views) from seven master templates, with optional HTML. |
+| `bitpool-cinematic-video` | Writes 8-second Veo/Gemini video prompts for Bitpool assembly sequences, fly-throughs and exploded views, with an optional timed HTML animation preview. |
+
 ## Mods
 
 None in `mods/` on the snapshot date. `/build-hermes-mod` creates them; `/install-mod` installs them.
