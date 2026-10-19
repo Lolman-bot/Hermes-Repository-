@@ -304,9 +304,10 @@ say is the Security Drata profile's. Two things sit outside it:
   failure on `DCF-179` is now prevented by the field staying empty rather than by refusing to create.
   Record the provenance in the **description**, with real values:
 
-  > *"`Date constraint:` controlled document `<path>` (version `<n>`, or quoted `<YYYY-MM-DD>`)
-  > states verbatim: `"<quote>"` — an input to the prioritisation pass."* — **or, where no date
-  > exists anywhere** — *"`Date constraint:` NONE KNOWN."*
+  > *"`Date constraint:` controlled document `<path in the isms repo>` (version `<n>`, or quoted
+  > `<YYYY-MM-DD>`) states verbatim: `"<quote>"` — an input to the prioritisation pass."* — **or,
+  > where no date exists anywhere** — *"`Date constraint:` NONE KNOWN."* The path is the approved
+  > copy, never the draft under `security-documentation` (`references/irt-tickets.md` §4).
 
   Two sources fail outright, and always have: a **wiki or GitBook mirror** (this is how `IRT-1` got a
   date six months after a mirror sync while the controlled document said "end 2024"), and a Drata

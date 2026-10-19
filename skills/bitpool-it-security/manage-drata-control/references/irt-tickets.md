@@ -444,7 +444,7 @@ Clause: <clause> — <clause title>
 Control: DCF-xxx <— a Drata link in the ?q=DCF-xxx form, if one is wanted (§6)>
 Driver: <corrective action under 10.2 | improvement objective under 6.2>
 
-Source document: <controlled document + path under security-documentation>
+Source document: <controlled document, path in the isms repo>
 States (<version n | quoted YYYY-MM-DD>): "<verbatim commitment text from that document>"
 Mirror page: <the page's title and link, if a wiki page mirrors it>
 
@@ -523,6 +523,14 @@ home the comment points at. Correct it later by adding a comment, never by editi
   document said then rather than what it says now. A lapse is stated in absolute dates — what was
   committed, in which document, and the date it passed — never an elapsed time. A clause ticket's
   document keeps its own date; §5, kind C, says why.
+- **Every `<controlled document, path>` — in these templates and in §6 — is the approved copy in the
+  `isms` repo (`isms/<Policy Name>.md`), never its draft.** That holds for the `Source document:`
+  line and every `Date constraint:` quote alike. ISMS policies exist under `security-documentation`
+  only as drafts in `ISMS/ISMS - Draft/` and `ISMS/ISMS - Draft (New)/`, and a run that queues a
+  policy change edits that draft — so a ticket naming the draft as its source stops matching its own
+  quote on the day it is written. The draft appears only on a `Date constraint (queued):` line,
+  through its policy-queue row. An earlier form 2 template named the `security-documentation` path;
+  corrected 2026-10-19.
 - **No mechanism narrative.** Why `duedate` is empty, what reads the ticket, whether an automation
   watches it, what the Drata connection can or cannot upload — none of it goes in a ticket. It lives
   in this file and in `/ask-drata`, and copied into ticket bodies it goes false in all of them at once
