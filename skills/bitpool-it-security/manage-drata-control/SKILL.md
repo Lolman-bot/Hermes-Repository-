@@ -1,7 +1,7 @@
 ---
 name: manage-drata-control
 description: "Use when treating a Drata control gap. Decide and record it."
-version: 1.0.0
+version: 1.0.1
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
