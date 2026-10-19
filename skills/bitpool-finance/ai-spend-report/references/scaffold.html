@@ -1,0 +1,755 @@
+<!--
+  SCAFFOLD TEMPLATE — Bitpool AI Spend & Usage Report
+  =====================================================
+  This file is the verified HTML/CSS/JS template for the ai-spend-report skill.
+  It contains REAL DATA from Apr/May 2026 as a worked example only.
+
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  IMPORTANT — DO NOT COPY THIS FILE AND EDIT THE DATA        ║
+  ║  When generating a new report, Hermes must:                 ║
+  ║  1. Run all SQL queries for the requested period            ║
+  ║  2. Build a NEW HTML file from scratch using this as a      ║
+  ║     structural/styling reference                            ║
+  ║  3. Replace ALL data constants with fresh query results     ║
+  ║  4. Derive ALL period labels from query results dynamically ║
+  ║  The data in this file is Apr/May 2026 only. Any value      ║
+  ║  like '2026-04', 'Apr', 'May', or specific dollar amounts   ║
+  ║  must be replaced by SQL query output for the new period.   ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  Structure to keep unchanged: all CSS, HTML layout, chart wiring,
+  helper functions (fmt/fmtN/pct/kpiCard/$), and the DATA→CHARTS
+  comment block pattern.
+
+  Structure to regenerate from SQL: everything between
+  // ══ DATA START ══ and // ══ DATA END ══ in the <script> block.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id='page-title'>Bitpool AI Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; background: #f1f5f9; color: #111827; font-size: 14px; line-height: 1.5; }
+  .page { max-width: 1260px; margin: 0 auto; padding: 28px 24px 56px; }
+
+  /* Header */
+  .report-header { background: linear-gradient(135deg, #061325 0%, #0a2540 50%, #0f2f55 100%); border-radius: 12px; padding: 26px 32px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-mark { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #0891b2, #10b981); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -1px; flex-shrink: 0; }
+  .report-title h1 { color: #fff; font-size: 20px; font-weight: 700; letter-spacing: -0.2px; }
+  .report-title p  { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 3px; }
+  .header-meta { text-align: right; color: rgba(255,255,255,0.45); font-size: 12px; line-height: 1.8; }
+  .header-meta strong { color: #67e8f9; font-size: 13px; font-weight: 700; }
+  .currency-tag { display: inline-block; font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.12); color: #67e8f9; border: 1px solid rgba(103,232,249,0.3); border-radius: 99px; padding: 2px 10px; margin-top: 5px; }
+
+  /* Notice box */
+  .notice-box { border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; }
+  .notice-box.info { background: #f0f9ff; border: 1px solid #bae6fd; }
+  .notice-box-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0369a1; margin-bottom: 8px; }
+  .notice-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .notice-list li { font-size: 12px; line-height: 1.5; color: #0c4a6e; padding-left: 16px; position: relative; }
+  .notice-list li::before { content: "—"; position: absolute; left: 0; font-weight: 700; color: #0891b2; }
+
+  /* Section heading */
+  .section-heading { display: flex; align-items: center; gap: 10px; margin: 28px 0 14px; }
+  .section-heading-bar { width: 4px; height: 20px; border-radius: 99px; flex-shrink: 0; background: linear-gradient(to bottom, #0066ff, #8b5cf6); }
+  .section-heading-bar.alt { background: linear-gradient(to bottom, #0891b2, #10b981); }
+  .section-heading h2 { font-size: 13px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 0.8px; }
+  .section-heading p { font-size: 12px; color: #64748b; margin-left: 4px; }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .kpi-card { position: relative; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(99,102,241,0.07); }
+  .kpi-card::before { content: ""; display: block; width: 32px; height: 4px; border-radius: 99px; background: linear-gradient(135deg, #0066ff, #8b5cf6); margin-bottom: 12px; }
+  .kpi-card.alt::before { background: linear-gradient(135deg, #0891b2, #10b981); }
+  .kpi-label { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
+  .kpi-value { font-size: 26px; font-weight: 800; color: #111827; line-height: 1.1; word-break: break-word; }
+  .kpi-sub   { font-size: 11px; color: #9ca3af; margin-top: 5px; }
+  .kpi-delta { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .kpi-delta.up   { color: #dc2626; }
+  .kpi-delta.down { color: #16a34a; }
+  .kpi-delta.neu  { color: #9ca3af; }
+
+  /* Chart grids */
+  .chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .chart-grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .chart-card { background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#0066ff,#8b5cf6) border-box; border: 1.5px solid transparent; border-radius: 14px; padding: 20px 22px; }
+  .chart-card.alt { background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#0891b2,#10b981) border-box; }
+  .chart-title    { font-size: 13px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+  .chart-subtitle { font-size: 11px; color: #9ca3af; margin-bottom: 16px; }
+  .chart-card canvas { max-height: 260px; }
+
+  /* Table card */
+  .table-card { background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#0066ff,#8b5cf6) border-box; border: 1.5px solid transparent; border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; overflow-x: auto; }
+  .table-card.alt { background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#0891b2,#10b981) border-box; }
+  .table-card-title    { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+  .table-card-subtitle { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+  table.rpt { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.rpt thead tr { background: linear-gradient(135deg,#0066ff,#8b5cf6); color: #fff; }
+  table.rpt.alt thead tr { background: linear-gradient(135deg,#0891b2,#10b981); }
+  table.rpt thead th { padding: 8px 10px; text-align: left; font-size: 11px; font-weight: 600; white-space: nowrap; letter-spacing: 0.3px; }
+  table.rpt thead th.r { text-align: right; }
+  table.rpt tbody tr { border-bottom: 1px solid #e2e8f0; }
+  table.rpt tbody tr:nth-child(even) { background: #f8fafc; }
+  table.rpt tbody td { padding: 7px 10px; color: #334155; }
+  table.rpt tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Badge */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+  .badge-cyan  { background: #ecfeff; color: #0e7490; }
+
+  /* Divider */
+  .divider { height: 1px; background: #e2e8f0; margin: 32px 0; }
+
+  /* Footer */
+  .report-footer { border-top: 1px solid #e2e8f0; padding-top: 14px; margin-top: 32px; font-size: 11px; color: #9ca3af; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+
+  @media print {
+    body { background: #fff; }
+    .page { padding: 0; max-width: none; }
+    .report-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .chart-grid-2, .chart-grid-3 { break-inside: avoid; }
+    .chart-card canvas { max-height: 200px; }
+  }
+  @media (max-width: 768px) {
+    .chart-grid-2, .chart-grid-3 { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header class="report-header">
+  <div class="header-left">
+    <div class="logo-mark">bp</div>
+    <div class="report-title">
+      <h1>AI Spend &amp; Usage Report</h1>
+      <p>Billing reconciliation · Claude subscription usage analytics</p>
+    </div>
+  </div>
+  <div class="header-meta">
+    <strong id='header-period'></strong><br>
+    <span id='header-generated'></span><br>
+    Sources: Xero · Anthropic Analytics · GitHub<br>
+    <span class="currency-tag">All monetary values in AUD</span>
+  </div>
+</header>
+
+<!-- NOTICES -->
+<div class="notice-box info">
+  <div class="notice-box-title">Report Notes</div>
+  <ul class="notice-list">
+    <li><strong>Usage data availability:</strong> Claude subscription usage statistics are sourced from Anthropic's manual monthly CSV exports. Data is only available after the prior month has been exported — figures may lag by up to one billing cycle.</li>
+    <li><strong>Billing data currency:</strong> AI billing figures are sourced from Xero bank transactions. This data reflects reconciliation completed by Finance at the time of export — charges may not appear until reconciliation is done.</li>
+    <li><strong>OpenRouter &amp; OpenAI — Phil Smith:</strong> Usage costs for OpenRouter and OpenAI currently include Phil Smith's activity alongside production platform usage. There is no breakdown available between Phil's personal API usage and production system calls within these figures.</li>
+  </ul>
+</div>
+
+<!-- SECTION 1: BILLING -->
+<div class="section-heading">
+  <div class="section-heading-bar"></div>
+  <h2>Section 1 — Billing</h2>
+  <p>Xero bank transactions · credit card charges</p>
+</div>
+
+<div class="kpi-grid" id="billing-kpis"></div>
+
+<div class="chart-grid-3">
+  <div class="chart-card">
+    <div class="chart-title">Monthly Spend by Vendor</div>
+    <div class="chart-subtitle">Grouped by calendar month — credit card charges</div>
+    <canvas id="chart-billing-monthly"></canvas>
+  </div>
+  <div class="chart-card alt">
+    <div class="chart-title">Vendor Share — 2-Month Total</div>
+    <div class="chart-subtitle">% of total combined spend</div>
+    <canvas id="chart-billing-donut"></canvas>
+  </div>
+</div>
+
+<div class="chart-grid-2">
+  <div class="chart-card alt">
+    <div class="chart-title">OpenRouter — Cumulative Spend</div>
+    <div class="chart-subtitle">Running total across all transactions</div>
+    <canvas id="chart-openrouter-cum"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Anthropic Direct — Cumulative Spend</div>
+    <div class="chart-subtitle">Running total across all transactions</div>
+    <canvas id="chart-anthropic-cum"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 2: USAGE -->
+<div class="divider"></div>
+<div class="section-heading">
+  <div class="section-heading-bar alt"></div>
+  <h2>Section 2 — Claude Subscription Usage</h2>
+  <p>Anthropic claude.ai Team plan · per-user activity and spend</p>
+</div>
+
+<!-- 2a: Per-user detail -->
+<div class="section-heading" style="margin-top:4px">
+  <div class="section-heading-bar"></div>
+  <h2 style="font-size:12px">2a — Per-User Usage Detail</h2>
+</div>
+
+<div class="kpi-grid" id="usage-kpis"></div>
+
+<div class="chart-grid-2">
+  <div class="chart-card">
+    <div class="chart-title">Spend by User — Apr vs May</div>
+    <div class="chart-subtitle">Net spend per team member · top spenders shown</div>
+    <canvas id="chart-user-spend"></canvas>
+  </div>
+  <div class="chart-card alt">
+    <div class="chart-title">Spend by Product — Apr vs May</div>
+    <div class="chart-subtitle">Claude Code and Cowork dominate; Chat declining</div>
+    <canvas id="chart-product-spend"></canvas>
+  </div>
+</div>
+
+<div class="chart-grid-2">
+  <div class="chart-card">
+    <div class="chart-title">Monthly Trend — Requests vs Spend</div>
+    <div class="chart-subtitle">Spend rising faster than requests in May — higher-tier model usage</div>
+    <canvas id="chart-requests-spend"></canvas>
+  </div>
+  <div class="chart-card alt">
+    <div class="chart-title">Web Searches by User</div>
+    <div class="chart-subtitle">Total web search tool calls across both months</div>
+    <canvas id="chart-websearch"></canvas>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-card-title">Per-User Detail — Claude Subscription</div>
+  <div class="table-card-subtitle">Anthropic claude.ai Team plan · <span id='usage-table-period'></span></div>
+  <table class="rpt">
+    <thead><tr>
+      <th>User</th>
+      <th class="r" id='th-m0-spend'></th><th class="r" id='th-m1-spend'></th>
+      <th class="r" id='th-m0-req'></th><th class="r" id='th-m1-req'></th>
+      <th class="r" id='th-m0-ws'></th><th class="r" id='th-m1-ws'></th>
+    </tr></thead>
+    <tbody id="user-detail-body"></tbody>
+  </table>
+</div>
+
+<!-- 2b: Claude Code lines -->
+<div class="section-heading">
+  <div class="section-heading-bar alt"></div>
+  <h2 style="font-size:12px">2b — Claude Code: Lines Committed</h2>
+</div>
+
+<div class="kpi-grid" id="cc-kpis"></div>
+
+<div class="chart-grid-3">
+  <div class="chart-card">
+    <div class="chart-title">Claude Code Lines per User — Apr vs May</div>
+    <div class="chart-subtitle">Lines of code committed via Claude Code CLI</div>
+    <canvas id="chart-cc-lines"></canvas>
+  </div>
+  <div class="chart-card alt">
+    <div class="chart-title">Lines by Month</div>
+    <div class="chart-subtitle">Apr vs May total distribution</div>
+    <canvas id="chart-cc-donut"></canvas>
+  </div>
+</div>
+
+<!-- 2c: GitHub activity -->
+<div class="section-heading">
+  <div class="section-heading-bar"></div>
+  <h2 style="font-size:12px">2c — GitHub Commit Activity</h2>
+  <p><span id='gh-period-sub'></span></p>
+</div>
+
+<div class="chart-grid-2">
+  <div class="chart-card">
+    <div class="chart-title">Weekly Commits &amp; Additions</div>
+    <div class="chart-subtitle">All contributors · note: large additions spike possible at period end</div>
+    <canvas id="chart-gh-weekly"></canvas>
+  </div>
+  <div class="chart-card alt">
+    <div class="chart-title">Commits by GitHub Contributor</div>
+    <div class="chart-subtitle"><span id='gh-period'></span></div>
+    <canvas id="chart-gh-contributors"></canvas>
+  </div>
+</div>
+
+<div class="table-card alt">
+  <div class="table-card-title">GitHub Contributor Summary</div>
+  <div class="table-card-subtitle"><span id='gh-period'></span> · sorted by commits</div>
+  <table class="rpt alt" id="gh-table"></table>
+</div>
+
+<div class="report-footer">
+  <span>Bitpool Pty Ltd — Internal Use Only</span>
+  <span>Xero BankTransactions · Anthropic AllActivity &amp; ClaudeCode · GitHub contributor_weekly_stats</span>
+  <span><span id='footer-generated'></span></span>
+</div>
+
+</div><!-- /page -->
+<script>
+// ══════════════════════════════════════════════════════════════
+// ALL DATA FROM SQL — no hardcoded business values
+// Query sources documented inline for skill re-generation
+// ══════════════════════════════════════════════════════════════
+
+// ══ DATA START ══════════════════════════════════════════════════
+// Replace everything between DATA START and DATA END with fresh
+// query results each run. Do not modify anything outside this block.
+// Each constant name is fixed — the rendering code references them.
+// ════════════════════════════════════════════════════════════════
+
+// SOURCE: query 3a — vendor monthly totals
+// SHAPE:  [{vendor, month:'YYYY-MM', total, txns}, ...]
+const BILLING_BY_VENDOR_MONTH = [/*INJECT:BILLING_BY_VENDOR_MONTH*/];
+
+// SOURCE: query 3b — vendor period totals
+// SHAPE:  [{vendor, total, txns}, ...]
+const BILLING_BY_VENDOR = [/*INJECT:BILLING_BY_VENDOR*/];
+const BILLING_GRAND_TOTAL = /*INJECT:BILLING_GRAND_TOTAL*/0;
+const BILLING_TOTAL_TXNS  = /*INJECT:BILLING_TOTAL_TXNS*/0;
+
+// SOURCE: query 3c — monthly grand totals
+// SHAPE:  [{month:'YYYY-MM', total}, ...]
+const BILLING_BY_MONTH = [/*INJECT:BILLING_BY_MONTH*/];
+
+// SOURCE: query 3d — individual Anthropic transactions (chronological)
+// SHAPE:  [{d:'YYYY-MM-DD', a:number}, ...]
+const BILLING_TXN_AN = [/*INJECT:BILLING_TXN_AN*/];
+
+// SOURCE: query 3d — individual OpenRouter transactions (chronological)
+// SHAPE:  [{d:'YYYY-MM-DD', a:number}, ...]
+const BILLING_TXN_OR = [/*INJECT:BILLING_TXN_OR*/];
+
+// SOURCE: query 3e — usage monthly totals
+// SHAPE:  [{month:'YYYY-MM', spend, requests, users}, ...]
+const USAGE_BY_MONTH = [/*INJECT:USAGE_BY_MONTH*/];
+
+// SOURCE: query 3f — usage per user per month (pivoted)
+// SHAPE:  [{u, m0_s, m1_s, m0_r, m1_r, m0_w, m1_w}, ...]
+// m0 = first month in period, m1 = second month, etc.
+// Keys are positional (m0/m1) not month-name-specific.
+const USAGE_BY_USER = [/*INJECT:USAGE_BY_USER*/];
+
+// SOURCE: query 3g — usage by product per month (pivoted)
+// SHAPE:  [{product, m0, m1}, ...]
+const USAGE_BY_PRODUCT = [/*INJECT:USAGE_BY_PRODUCT*/];
+
+// SOURCE: query 3h — Claude Code lines per user per month (pivoted)
+// SHAPE:  [{u, m0, m1}, ...]
+const CC_LINES_BY_USER = [/*INJECT:CC_LINES_BY_USER*/];
+
+// SOURCE: query 3i — Claude Code monthly totals
+// SHAPE:  [{month:'YYYY-MM', total, users}, ...]
+const CC_TOTALS = [/*INJECT:CC_TOTALS*/];
+
+// SOURCE: query 3j — GitHub contributor totals
+// SHAPE:  [{login, commits, additions, deletions, net, bot?:true}, ...]
+// Set bot:true for github-actions[bot] and dependabot[bot]
+// Set agent:true for 'claude' login (AI agent, not a bot)
+const GH_CONTRIBUTORS = [/*INJECT:GH_CONTRIBUTORS*/];
+
+// SOURCE: query 3k — GitHub weekly totals
+// SHAPE:  [{w:'MMM D', commits, additions, deletions}, ...]
+// w = short display label e.g. 'Jun 2' derived from week_start date
+const GH_WEEKLY = [/*INJECT:GH_WEEKLY*/];
+
+// Report period metadata — derived from user input and query results
+const REPORT_PERIOD_LABEL = '/*INJECT:PERIOD_LABEL*/'; // e.g. 'April – May 2026'
+const REPORT_GENERATED    = '/*INJECT:GENERATED_DATE*/'; // e.g. '11 June 2026'
+const MONTH_LABELS = [/*INJECT:MONTH_LABELS*/]; // e.g. ['April 2026','May 2026']
+
+// ══ DATA END ════════════════════════════════════════════════════
+
+
+// ══════════════════════════════════════════════════════════════
+// PERIOD LABEL INJECTION — populates all dynamic text nodes
+// from REPORT_PERIOD_LABEL, REPORT_GENERATED, MONTH_LABELS
+// Run immediately so labels are set before charts render
+// ══════════════════════════════════════════════════════════════
+(function injectLabels() {
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  set('page-title',         'Bitpool AI Report — ' + REPORT_PERIOD_LABEL);
+  set('header-period',      REPORT_PERIOD_LABEL);
+  set('header-generated',   'Generated ' + REPORT_GENERATED);
+  set('footer-generated',   'Generated ' + REPORT_GENERATED);
+  set('usage-table-period', MONTH_LABELS.join(' & '));
+  set('th-m0-spend',   (MONTH_LABELS[0]||'M0') + ' Spend');
+  set('th-m1-spend',   (MONTH_LABELS[1]||'M1') + ' Spend');
+  set('th-m0-req',     (MONTH_LABELS[0]||'M0') + ' Requests');
+  set('th-m1-req',     (MONTH_LABELS[1]||'M1') + ' Requests');
+  set('th-m0-ws',      (MONTH_LABELS[0]||'M0') + ' Searches');
+  set('th-m1-ws',      (MONTH_LABELS[1]||'M1') + ' Searches');
+  const ghPeriod = MONTH_LABELS.join(' – ');
+  set('gh-period-sub', ghPeriod + ' · all repos · bitpool org');
+  set('gh-period',     ghPeriod);
+  set('gh-table-period', ghPeriod);
+  document.title = 'Bitpool AI Report — ' + REPORT_PERIOD_LABEL;
+})();
+
+// ══════════════════════════════════════════════════════════════
+// HELPERS — do not modify between report runs
+// ══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const fmt  = n => '$' + Math.round(n).toLocaleString();
+const fmtN = n => Math.round(n).toLocaleString();
+const pct  = (a, b) => b === 0 ? null : Math.round((a - b) / b * 100);
+
+function kpiCard(label, value, sub, delta, deltaDir, alt=false) {
+  const dir = deltaDir === 'up' ? 'up' : deltaDir === 'down' ? 'down' : 'neu';
+  const arrow = dir === 'up' ? '↑' : dir === 'down' ? '↓' : '—';
+  return `<div class="kpi-card${alt?' alt':''}">
+    <div class="kpi-label">${label}</div>
+    <div class="kpi-value">${value}</div>
+    <div class="kpi-sub">${sub}</div>
+    ${delta ? `<div class="kpi-delta ${dir}">${arrow} ${delta}</div>` : ''}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// BUILD KPI SECTIONS — all labels from MONTH_LABELS, values from SQL constants
+// ══════════════════════════════════════════════════════════════
+
+// Set dynamic period labels from injected MONTH_LABELS
+const M0 = MONTH_LABELS[0]; // first month label e.g. 'April 2026'
+const M1 = MONTH_LABELS[1] || ''; // second month label e.g. 'May 2026'
+const m0key = BILLING_BY_MONTH[0].month;
+const m1key = BILLING_BY_MONTH[1] ? BILLING_BY_MONTH[1].month : null;
+
+// Billing KPIs
+const m0Billing = BILLING_BY_MONTH[0].total;
+const m1Billing = m1key ? BILLING_BY_MONTH[1].total : 0;
+const billingMoM = pct(m1Billing, m0Billing);
+const anthTotal = BILLING_BY_VENDOR.find(v=>v.vendor.startsWith('Anthropic')).total;
+const orTotal   = BILLING_BY_VENDOR.find(v=>v.vendor==='OpenRouter').total;
+const oaiEntry  = BILLING_BY_VENDOR.find(v=>v.vendor==='OpenAI');
+const oaiTotal  = oaiEntry ? oaiEntry.total : 0;
+const anthM0    = (BILLING_BY_VENDOR_MONTH.find(v=>v.vendor.startsWith('Anthropic')&&v.month===m0key)||{total:0}).total;
+const anthM1    = m1key ? (BILLING_BY_VENDOR_MONTH.find(v=>v.vendor.startsWith('Anthropic')&&v.month===m1key)||{total:0}).total : 0;
+const orM0      = (BILLING_BY_VENDOR_MONTH.find(v=>v.vendor==='OpenRouter'&&v.month===m0key)||{total:0}).total;
+const orM1      = m1key ? (BILLING_BY_VENDOR_MONTH.find(v=>v.vendor==='OpenRouter'&&v.month===m1key)||{total:0}).total : 0;
+const anthMoM   = pct(anthM1, anthM0);
+const orMoM     = pct(orM1, orM0);
+const orTxns    = (BILLING_BY_VENDOR.find(v=>v.vendor==='OpenRouter')||{txns:0}).txns;
+const anthTxns  = (BILLING_BY_VENDOR.find(v=>v.vendor.startsWith('Anthropic'))||{txns:0}).txns;
+const oaiTxns   = oaiEntry ? oaiEntry.txns : 0;
+
+$('billing-kpis').innerHTML =
+  kpiCard('Total AI Spend', fmt(BILLING_GRAND_TOTAL),
+    `${M0} ${fmt(m0Billing)} · ${M1} ${fmt(m1Billing)}`,
+    `${billingMoM>0?'+':''}${billingMoM}% ${M0} → ${M1}`, billingMoM>0?'up':'down') +
+  kpiCard('Anthropic Direct', fmt(anthTotal),
+    `${M0} ${fmt(anthM0)} · ${M1} ${fmt(anthM1)}`,
+    `${anthMoM}% ${M0} → ${M1}`, anthMoM>0?'up':'down', true) +
+  kpiCard('OpenRouter', fmt(orTotal),
+    `${M0} ${fmt(orM0)} · ${M1} ${fmt(orM1)}`,
+    `+${orMoM}% ${M0} → ${M1}`, 'up') +
+  kpiCard('OpenAI', fmt(oaiTotal),
+    oaiTxns ? `${oaiTxns} transaction${oaiTxns>1?'s':''}` : 'No charges this period',
+    '', 'neu', true) +
+  kpiCard('Transactions', BILLING_TOTAL_TXNS,
+    `OR ${orTxns} · Anthropic ${anthTxns} · OpenAI ${oaiTxns}`,
+    'All authorised in Xero', 'neu');
+
+// Usage KPIs
+const m0Usage = USAGE_BY_MONTH[0];
+const m1Usage = USAGE_BY_MONTH[1] || {spend:0,requests:0,users:0};
+const usageSpendMoM = pct(m1Usage.spend, m0Usage.spend);
+const usageReqMoM   = pct(m1Usage.requests, m0Usage.requests);
+const topM1User = [...USAGE_BY_USER].sort((a,b)=>b.m1_s-a.m1_s)[0];
+
+$('usage-kpis').innerHTML =
+  kpiCard('Total Claude Spend', fmt(USAGE_BY_MONTH.reduce((s,m)=>s+m.spend,0)),
+    USAGE_BY_MONTH.map((m,i)=>`${MONTH_LABELS[i]} ${fmt(m.spend)}`).join(' · '),
+    `+${usageSpendMoM}% ${M0} → ${M1}`, 'up') +
+  kpiCard('Active Users', m0Usage.users,
+    USAGE_BY_MONTH.map((m,i)=>`${MONTH_LABELS[i]} ${m.users}`).join(' · '), '', 'neu', true) +
+  kpiCard('Total Requests', fmtN(USAGE_BY_MONTH.reduce((s,m)=>s+m.requests,0)),
+    USAGE_BY_MONTH.map((m,i)=>`${MONTH_LABELS[i]} ${fmtN(m.requests)}`).join(' · '),
+    `${usageReqMoM}% request volume`, usageReqMoM>0?'up':'down') +
+  kpiCard(`Top Spender (${M1})`, topM1User?topM1User.u:'—',
+    topM1User?`${fmt(topM1User.m1_s)} in ${M1}`:'',
+    topM1User?`+${pct(topM1User.m1_s,topM1User.m0_s)}% ${M0} → ${M1}`:'', 'up', true);
+
+// Claude Code KPIs
+const ccM0 = CC_TOTALS[0];
+const ccM1 = CC_TOTALS[1]||{total:0,users:0};
+const ccMoM = pct(ccM1.total, ccM0.total);
+const topCCM0 = CC_LINES_BY_USER.reduce((a,b)=>b.m0>a.m0?b:a,{m0:0,u:'—'});
+const topCCM1 = CC_LINES_BY_USER.reduce((a,b)=>b.m1>a.m1?b:a,{m1:0,u:'—'});
+
+$('cc-kpis').innerHTML =
+  kpiCard(`Total Lines (${M0})`, fmtN(ccM0.total),
+    `${ccM0.users} active users`, '', 'neu', true) +
+  kpiCard(`Total Lines (${M1})`, fmtN(ccM1.total),
+    `${ccM1.users} active users`,
+    `${ccMoM}% ${M0} → ${M1}`, ccMoM<0?'down':'up') +
+  kpiCard(`Top Contributor (${M0})`, topCCM0.u,
+    `${fmtN(topCCM0.m0)} lines`, '', 'neu') +
+  kpiCard(`Top Contributor (${M1})`, topCCM1.u,
+    `${fmtN(topCCM1.m1)} lines`, '', 'neu', true);
+
+// ══════════════════════════════════════════════════════════════
+// USER DETAIL TABLE — uses m0_s/m1_s/m0_r/m1_r/m0_w/m1_w keys
+// ══════════════════════════════════════════════════════════════
+const udBody = $('user-detail-body');
+USAGE_BY_USER.forEach(u => {
+  const bold = (u.m0_s + u.m1_s) >= 50 ? 'font-weight:700' : '';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="${bold}">${u.u}</td>
+    <td class="r">${fmt(u.m0_s)}</td><td class="r">${fmt(u.m1_s)}</td>
+    <td class="r">${fmtN(u.m0_r)}</td><td class="r">${fmtN(u.m1_r)}</td>
+    <td class="r">${u.m0_w}</td><td class="r">${u.m1_w}</td>`;
+  udBody.appendChild(tr);
+});
+
+// ══════════════════════════════════════════════════════════════
+// GITHUB TABLE
+// ══════════════════════════════════════════════════════════════
+const ghTable = $('gh-table');
+ghTable.innerHTML = `<thead><tr class="">
+  <th>GitHub Login</th><th class="r">Commits</th>
+  <th class="r">Additions</th><th class="r">Deletions</th><th class="r">Net Lines</th>
+</tr></thead>`;
+const ghBody = document.createElement('tbody');
+GH_CONTRIBUTORS.forEach(c => {
+  const tr = document.createElement('tr');
+  const netStr = c.net >= 0 ? '+'+fmtN(c.net) : '–'+fmtN(Math.abs(c.net));
+  tr.innerHTML = `
+    <td><code>${c.login}</code>${c.bot ? ' <span class="badge badge-cyan">bot</span>' : ''}</td>
+    <td class="r">${fmtN(c.commits)}</td>
+    <td class="r">${fmtN(c.additions)}</td>
+    <td class="r">${fmtN(c.deletions)}</td>
+    <td class="r">${netStr}</td>`;
+  ghBody.appendChild(tr);
+});
+ghTable.appendChild(ghBody);
+// Apply alt header style
+ghTable.classList.add('rpt','alt');
+
+// ══════════════════════════════════════════════════════════════
+// CHART COLOURS
+// ══════════════════════════════════════════════════════════════
+const BLUE   = '#0066ff';
+const PURPLE = '#8b5cf6';
+const CYAN   = '#0891b2';
+const GREEN  = '#10b981';
+const SLATE  = '#64748b';
+const INDIGO = '#4f46e5';
+const TEAL   = '#0e7490';
+
+const globalOpts = {
+  responsive: true, maintainAspectRatio: true,
+  plugins: {
+    legend: { labels: { font:{size:11}, boxWidth:12, padding:10 } },
+    tooltip: { bodyFont:{size:12}, titleFont:{size:12} }
+  }
+};
+
+// ══════════════════════════════════════════════════════════════
+// CHARTS — all data from SQL constants above
+// ══════════════════════════════════════════════════════════════
+
+// 1. Monthly billing grouped bar
+new Chart($('chart-billing-monthly'), {
+  type:'bar',
+  data:{
+    labels:MONTH_LABELS,
+    datasets:[
+      {label:'Anthropic', data:[anthApr,anthMay], backgroundColor:CYAN, borderRadius:4},
+      {label:'OpenRouter',data:[orApr,orMay],      backgroundColor:BLUE, borderRadius:4},
+      {label:'OpenAI',    data:BILLING_BY_MONTH.map(m=>(BILLING_BY_VENDOR_MONTH.find(v=>v.vendor==='OpenAI'&&v.month===m.month)||{total:0}).total),       backgroundColor:SLATE,borderRadius:4},
+    ]
+  },
+  options:{...globalOpts, scales:{
+    y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#f1f5f9'}},
+    x:{grid:{display:false}}
+  }}
+});
+
+// 2. Vendor share donut
+new Chart($('chart-billing-donut'), {
+  type:'doughnut',
+  data:{
+    labels:['Anthropic','OpenRouter','OpenAI'],
+    datasets:[{data:[anthTotal,orTotal,oaiTotal],
+      backgroundColor:[CYAN,BLUE,SLATE],borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{...globalOpts, cutout:'62%',
+    plugins:{...globalOpts.plugins,legend:{position:'bottom',labels:{font:{size:11},padding:8}}}
+  }
+});
+
+// 3. OpenRouter cumulative
+let orRun=0;
+const orCum = BILLING_TXN_OR.map(t=>{ orRun+=t.a; return Math.round(orRun); });
+new Chart($('chart-openrouter-cum'), {
+  type:'line',
+  data:{labels:BILLING_TXN_OR.map(t=>t.d.slice(5)),
+    datasets:[{label:'Cumulative',data:orCum,
+      borderColor:CYAN,backgroundColor:CYAN+'22',borderWidth:2,fill:true,tension:0.3,pointRadius:3}]
+  },
+  options:{...globalOpts,scales:{
+    y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#f1f5f9'}},
+    x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}
+  },plugins:{...globalOpts.plugins,legend:{display:false}}}
+});
+
+// 4. Anthropic cumulative
+let anRun=0;
+const anCum = BILLING_TXN_AN.map(t=>{ anRun+=t.a; return Math.round(anRun); });
+new Chart($('chart-anthropic-cum'), {
+  type:'line',
+  data:{labels:BILLING_TXN_AN.map(t=>t.d.slice(5)),
+    datasets:[{label:'Cumulative',data:anCum,
+      borderColor:BLUE,backgroundColor:BLUE+'22',borderWidth:2,fill:true,tension:0.3,pointRadius:3}]
+  },
+  options:{...globalOpts,scales:{
+    y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#f1f5f9'}},
+    x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}
+  },plugins:{...globalOpts.plugins,legend:{display:false}}}
+});
+
+// 5. User spend
+const topUsers = USAGE_BY_USER.filter(u=>u.m0_s>0||u.m1_s>0);
+new Chart($('chart-user-spend'), {
+  type:'bar',
+  data:{labels:topUsers.map(u=>u.u),
+    datasets:[
+      {label:M0,data:topUsers.map(u=>u.m0_s),backgroundColor:BLUE+'bb',borderRadius:3},
+      {label:M1,  data:topUsers.map(u=>u.m1_s),backgroundColor:PURPLE,    borderRadius:3},
+    ]
+  },
+  options:{...globalOpts,scales:{
+    y:{ticks:{callback:v=>'$'+v},grid:{color:'#f1f5f9'}},
+    x:{grid:{display:false}}
+  }}
+});
+
+// 6. Product spend
+const prodF = USAGE_BY_PRODUCT.filter(p=>p.m0>0||p.m1>0);
+new Chart($('chart-product-spend'), {
+  type:'bar',
+  data:{labels:prodF.map(p=>p.product),
+    datasets:[
+      {label:M0,data:prodF.map(p=>p.m0),backgroundColor:CYAN+'bb',borderRadius:3},
+      {label:M1,  data:prodF.map(p=>p.m1),backgroundColor:GREEN,    borderRadius:3},
+    ]
+  },
+  options:{...globalOpts,indexAxis:'y',scales:{
+    x:{ticks:{callback:v=>'$'+v},grid:{color:'#f1f5f9'}},
+    y:{grid:{display:false}}
+  }}
+});
+
+// 7. Requests vs spend trend
+new Chart($('chart-requests-spend'), {
+  type:'bar',
+  data:{
+    labels:MONTH_LABELS,
+    datasets:[
+      {label:'Requests',data:USAGE_BY_MONTH.map(m=>m.requests),
+        backgroundColor:BLUE+'44',borderColor:BLUE,borderWidth:1.5,yAxisID:'y',borderRadius:3},
+      {label:'Spend',data:USAGE_BY_MONTH.map(m=>m.spend),type:'line',
+        borderColor:PURPLE,backgroundColor:PURPLE+'22',borderWidth:2,fill:false,
+        yAxisID:'y2',tension:0,pointRadius:6,pointBackgroundColor:PURPLE}
+    ]
+  },
+  options:{...globalOpts,scales:{
+    y:  {position:'left', ticks:{callback:v=>v.toLocaleString()},grid:{color:'#f1f5f9'}},
+    y2: {position:'right',ticks:{callback:v=>'$'+v},grid:{display:false}},
+    x:  {grid:{display:false}}
+  }}
+});
+
+// 8. Web searches
+const wsUsers = USAGE_BY_USER.filter(u=>(u.apr_w+u.may_w)>0);
+new Chart($('chart-websearch'), {
+  type:'bar',
+  data:{labels:wsUsers.map(u=>u.u),
+    datasets:[
+      {label:'April',data:wsUsers.map(u=>u.apr_w),backgroundColor:CYAN+'bb',borderRadius:3},
+      {label:'May',  data:wsUsers.map(u=>u.may_w),backgroundColor:TEAL,      borderRadius:3},
+    ]
+  },
+  options:{...globalOpts,scales:{
+    y:{ticks:{stepSize:10},grid:{color:'#f1f5f9'}},
+    x:{grid:{display:false}}
+  }}
+});
+
+// 9. CC lines bar
+const ccF = CC_LINES_BY_USER.filter(u=>u.m0>0||u.m1>0);
+new Chart($('chart-cc-lines'), {
+  type:'bar',
+  data:{labels:ccF.map(u=>u.u),
+    datasets:[
+      {label:M0,data:ccF.map(u=>u.m0),backgroundColor:GREEN+'99',borderRadius:3},
+      {label:M1,  data:ccF.map(u=>u.m1),backgroundColor:GREEN,      borderRadius:3},
+    ]
+  },
+  options:{...globalOpts,scales:{
+    y:{ticks:{callback:v=>v.toLocaleString()},grid:{color:'#f1f5f9'}},
+    x:{grid:{display:false}}
+  }}
+});
+
+// 10. CC donut
+new Chart($('chart-cc-donut'), {
+  type:'doughnut',
+  data:{
+    labels:[MONTH_LABELS[0]+' ('+fmtN(ccM0.total)+')',MONTH_LABELS[1]+' ('+fmtN(ccM1.total)+')'],
+    datasets:[{data:[ccM0.total,ccM1.total],
+      backgroundColor:[GREEN+'88',GREEN],borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{...globalOpts,cutout:'60%',
+    plugins:{...globalOpts.plugins,legend:{position:'bottom',labels:{font:{size:11},padding:8}}}
+  }
+});
+
+// 11. GitHub weekly
+new Chart($('chart-gh-weekly'), {
+  type:'bar',
+  data:{labels:GH_WEEKLY.map(w=>w.w),
+    datasets:[
+      {label:'Commits',data:GH_WEEKLY.map(w=>w.commits),
+        backgroundColor:BLUE+'bb',borderRadius:3,yAxisID:'y'},
+      {label:'Additions',data:GH_WEEKLY.map(w=>w.additions),type:'line',
+        borderColor:CYAN,backgroundColor:'transparent',borderWidth:2,
+        yAxisID:'y2',tension:0.3,pointRadius:4,pointBackgroundColor:CYAN}
+    ]
+  },
+  options:{...globalOpts,scales:{
+    y:  {position:'left', ticks:{font:{size:10}},grid:{color:'#f1f5f9'}},
+    y2: {position:'right',ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v,font:{size:10}},grid:{display:false}},
+    x:  {ticks:{font:{size:11}},grid:{display:false}}
+  }}
+});
+
+// 12. GitHub contributors
+const ghChartData = GH_CONTRIBUTORS.filter(c=>!c.bot||c.login==='claude');
+new Chart($('chart-gh-contributors'), {
+  type:'bar',
+  data:{labels:ghChartData.map(c=>c.login),
+    datasets:[{label:'Commits',data:ghChartData.map(c=>c.commits),
+      backgroundColor:[BLUE,CYAN,PURPLE,GREEN,SLATE,INDIGO,TEAL,BLUE+'77',CYAN+'77'],
+      borderRadius:4}]
+  },
+  options:{...globalOpts,indexAxis:'y',scales:{
+    x:{grid:{color:'#f1f5f9'}},
+    y:{ticks:{font:{size:11}},grid:{display:false}}
+  },plugins:{...globalOpts.plugins,legend:{display:false}}}
+});
+</script>
+</body>
+</html>
