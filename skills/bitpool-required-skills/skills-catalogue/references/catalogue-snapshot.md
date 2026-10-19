@@ -1,6 +1,6 @@
 # Bitpool Hermes skills catalogue — snapshot
 
-**Snapshot taken: 2026-10-16.** Mirrors the Skills table of the `README.md` in
+**Snapshot taken: 2026-10-19.** Mirrors the Skills table of the `README.md` in
 **https://github.com/Lolman-bot/Hermes-Repository-**, which is the live catalogue and the authority.
 If something someone asks about isn't below, that means it wasn't in the repo on the snapshot date —
 it does **not** prove it doesn't exist today. Say so and point at the README.
@@ -58,7 +58,7 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | `bitpool-dashboard-builder` | Builds, extends or rearranges Bitpool Cloud dashboards by driving a signed-in browser, with permission gates on every write. |
 | `bitpool-hvac-schematics` | Builds self-contained, on-brand HTML BMS/SCADA graphics for HVAC and central plant with live data chips, animated flow and alarms. |
 | `bitpool-report-builder` | Builds paginated Bitpool Cloud reports (wizard, canvas, data sources, Preview PDF) by driving a signed-in browser, with permission gates on every write. |
-| `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template. |
+| `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template plus a 50-animation layout library. |
 
 ## Skills — prototyping (`skills/bitpool-prototyping/`, rubric-driven generate → evaluate → review design loop)
 

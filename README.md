@@ -81,7 +81,7 @@ install by full path as shown above.
 | `bitpool-dashboard-builder` | Builds, extends or rearranges Bitpool Cloud dashboards by driving a signed-in browser, with permission gates on every write. | references/ |
 | `bitpool-hvac-schematics` | Builds self-contained, on-brand HTML BMS/SCADA graphics for HVAC and central plant with live data chips, animated flow and alarms. | references/, assets/, scripts/ |
 | `bitpool-report-builder` | Builds paginated Bitpool Cloud reports (wizard, canvas, data sources, Preview PDF) by driving a signed-in browser, with permission gates on every write. | references/ |
-| `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template. | references/, assets/, scripts/ |
+| `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template plus a 50-animation layout library. | references/, assets/, scripts/ |
 
 ### `bitpool-prototyping` — Prototyping (rubric-driven generate → evaluate → review design loop)
 

@@ -1,7 +1,7 @@
 ---
 name: bitpool-training-deck-builder
 description: "Use when making a Bitpool training deck. On-brand HTML."
-version: 1.0.0
+version: 1.1.0
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -33,7 +33,7 @@ Don't use for:
 3. **If anything is missing, ask for only that.** Missing means a section with no content, a "click X" step with no screenshot, an image with no home, or a fact you'd have to invent. Ask for all gaps in one message. Never ask for videos. If nothing is missing, carry on. Done when there are no gaps left.
 4. **Plan the outline.** Give each slide one of the 28 layouts, put a visual layout or a dark slide every three or four slides, and suggest extra slides where they'd help ("Why" slides, section dividers, split slides, a closing slide), each marked `[NEW]`. `references/slide-layouts.md`. Done when the outline is shown.
 5. **If the outline isn't approved, change it and show it again.** Loop on step 4 until they approve it, including which `[NEW]` slides to keep. Done when they approve.
-6. **Build the deck.** Load `/bitpool-design-system` first. Copy `assets/deck-template.html` with `terminal` (`cp`), then fill it slide by slide from the template's layouts (`patch` / `write_file` on slide sections only), and compare it with `assets/example-deck.html`. `references/build-check-review.md`. Done when every approved slide exists.
+6. **Build the deck.** Load `/bitpool-design-system` first. Copy `assets/deck-template.html` with `terminal` (`cp`), then fill it slide by slide from the template's layouts (`patch` / `write_file` on slide sections only), and compare it with `assets/example-deck.html`. For extra motion, borrow layouts from `assets/example-animation-library.html` (`references/animation-library.md`). `references/build-check-review.md`. Done when every approved slide exists.
 7. **Place the pins and boxes on screenshots.** One cyan box and one numbered pin per step, checked in the browser. `references/screenshot-pins.md`. Done when every box sits on its control in a `browser_vision` check.
 8. **Check every slide.** Nothing overflows at laptop size, every image and video shows, and the counter and navigator are right. Fix and recheck. `references/build-check-review.md`. Done when every check there passes.
 9. **Show it for review.** If they want changes, make them and go back to step 8. Loop until they're happy. Done when they say it's done.
@@ -76,6 +76,7 @@ Read the file itself — this table is an index, not a substitute.
 | `references/intake.md` | The three opening questions, how to read each input type (pptx, docx, pdf, notes, images, video), the `media/` folder, what counts as missing, and screenshot privacy. |
 | `references/slide-layouts.md` | The twelve content and sixteen visual layouts with when to use each and their limits, rhythm, dark slides and the photo cover, mapping input slides to layouts, the suggested extra slides, the outline format, and slide-copy rules. |
 | `references/screenshot-pins.md` | The box-and-pin markup, percent coordinates, unique `data-k` keys, and checking positions in the browser. |
+| `references/animation-library.md` | The 50 extra animated layouts in `assets/example-animation-library.html`: what each one's motion is, what it suits, its fixed item count, and how to copy a slide plus its CSS into a draft without touching the template's own style. |
 | `references/build-check-review.md` | Filling the template, adding video, comparing with the example, the overflow, broken-image and sample-copy checks, the review loop, and the final embed and hand-over. |
 
 Assets (copied, never retyped from memory):
@@ -84,6 +85,7 @@ Assets (copied, never retyped from memory):
 |---|---|
 | `assets/deck-template.html` | The working deck shell: the full style, navigation, Edit, Save HTML, PDF, reveal and pin scripts, with the cube logo and Inter built in, the dark-slide (`.dk`) and photo-cover styles, and one slide for each of the 28 layouts (`<!-- LAYOUT: name -->`). Copied as the start of every deck. |
 | `assets/example-deck.html` | A finished Bitpool training deck (an older AI-tools course), screenshots swapped for placeholders. Style reference for look and rhythm only; never copied as a starting file and never a content source. |
+| `assets/example-animation-library.html` | A finished 50-slide sample deck ("Buildings that run themselves") where every slide has a different animation, with image placeholders. A library of extra visual layouts to borrow from; never copied as a starting file and never a content source. |
 | `assets/cube-mark.png` | The Bitpool cube logo used in the template, kept separately for anywhere else a slide needs it. |
 
 Scripts (executed, not described):

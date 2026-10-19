@@ -54,6 +54,11 @@ instead. Never move the drawn parts around to fit.
 | `toolbox-zones` | A grid of named things plus a separate dark panel for a second group. | 9 grid tiles + 2 panel tiles. |
 | `closing-loop` | A closing slide: a loop around the cube with next-step rows. Dark. | 5 rows. |
 
+**Need more motion?** `assets/example-animation-library.html` holds 50 more visual layouts, one
+animation each (odometer, radar, kanban, iris reveal, decision tree…). `references/animation-library.md`
+lists them with their item counts and how to borrow one. Mark a borrowed slide in the outline by its
+class, e.g. `m-radar  dk`.
+
 **Typed titles** (`<h2 class="title tw" style="--n:11">`) type themselves out — they suit a slash
 command or a short name. Set `--n` to the title's character count.
 
