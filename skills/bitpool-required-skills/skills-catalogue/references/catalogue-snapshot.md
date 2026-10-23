@@ -1,6 +1,6 @@
 # Bitpool Hermes skills catalogue — snapshot
 
-**Snapshot taken: 2026-10-19.** Mirrors the Skills table of the `README.md` in
+**Snapshot taken: 2026-10-23.** Mirrors the Skills table of the `README.md` in
 **https://github.com/Lolman-bot/Hermes-Repository-**, which is the live catalogue and the authority.
 If something someone asks about isn't below, that means it wasn't in the repo on the snapshot date —
 it does **not** prove it doesn't exist today. Say so and point at the README.
@@ -29,13 +29,12 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | Skill | What it does |
 |---|---|
 | `build-hermes-mod` | Builds a Hermes mod (desktop plugin, TUI widget, gateway hook or skin) from a plain description — flow chart for a yes, tests, README, a trial run — then a pull request adding it to the repo's `mods/` folder. |
-| `build-skill-from-examples` | Builds a new skill from examples of the work coming in and going out, plus a process you draw on a point-and-click canvas, then hands it to `create-new-skill` for the pull request. |
-| `create-new-skill` | Takes a new skill from idea to a pull request — a plain-language interview, bringing in a skill you already have, or a hand-over from `build-skill-from-examples` — with readiness checks and your confirmation before it goes to a reviewer. |
+| `create-new-skill` | Takes a new skill from idea to a pull request — a plain-language interview or bringing in a skill you already have — with readiness checks and your confirmation before it goes to a reviewer. |
 | `edit-mod` | Changes a Hermes mod you already have — the change, its tests, README and flow chart kept in step — then publishes it back the way you confirm. |
 | `edit-skill` | Changes or retires a skill that already ships in the repo, as one pull request once you confirm it's finished. Retiring archives it to `retired/`, never deletes. |
 | `install-mod` | Installs a mod from the repo's `mods/` folder onto your machine, or removes one — follows the mod's own install steps, shows every change for a yes first, never changes the repo. |
 | `log-skill-divergence` | Records when a skill's documented claim turns out to be wrong (or it misfired), so the finding reaches whoever maintains it. Asks first; logs only. |
-| `onboarding` | Walks a new starter through getting set up with Hermes, one step at a time — model, GitHub, repo access, installing the required skills. |
+| `onboarding` | Walks a new starter through getting set up with Hermes, one step at a time — model, GitHub, repo access, Git and a local clone of the skills repo, installing the required skills. `create-new-skill` and `edit-skill` send people here when that clone or Git is missing. |
 | `skill-health` | Grades how well a skill actually performed on a run, scores it out of 100, traces each miss to its cause, then offers to apply the fixes. |
 | `skills-catalogue` | This one — the repo link and what's in it. |
 | `teacher` | Explains how Hermes works in plain words — surfaces, models, memory, long conversations, skills, scheduled jobs, subagents, connections, profiles and mods. |
@@ -59,6 +58,7 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | `bitpool-hvac-schematics` | Builds self-contained, on-brand HTML BMS/SCADA graphics for HVAC and central plant with live data chips, animated flow and alarms. |
 | `bitpool-report-builder` | Builds paginated Bitpool Cloud reports (wizard, canvas, data sources, Preview PDF) by driving a signed-in browser, with permission gates on every write. |
 | `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template plus a 50-animation layout library. |
+| `bitpool-sld-converter` | Redraws a screenshot of a BMS single line diagram as a clean, on-brand meter tree for a Bitpool dashboard, and can optionally build the dashboard and attach one power stream per meter. |
 
 ## Skills — prototyping (`skills/bitpool-prototyping/`, rubric-driven generate → evaluate → review design loop)
 
@@ -78,6 +78,7 @@ Start a new conversation (or `/reload-skills`) so the `/command` appears. `herme
 | `bitpool-3d-image` | Writes Gemini image-to-image prompts that turn an attached photo, plan or diagram into a Bitpool archviz render, with an optional HTML mockup or handoff page. |
 | `bitpool-cinematic-photo` | Writes Gemini prompts for Bitpool marketing stills (towers, plant rooms, data centres, cutaways, exploded views) from seven master templates, with optional HTML. |
 | `bitpool-cinematic-video` | Writes 8-second Veo/Gemini video prompts for Bitpool assembly sequences, fly-throughs and exploded views, with an optional timed HTML animation preview. |
+| `bitpool-diagram-animations` | Turns a PNG of a diagram into a sharp, animated Bitpool version — one HTML file, light or dark, that builds in then keeps moving, and plays in any browser. |
 
 ## Skills — general (`skills/bitpool-general/`, utilities for any role: docs, writing standard, conversions, transcription)
 
