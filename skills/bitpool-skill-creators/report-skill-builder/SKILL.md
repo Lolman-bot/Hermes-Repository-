@@ -1,7 +1,7 @@
 ---
 name: report-skill-builder
 description: "Use when making a SQL report repeatable. Builds the skill."
-version: 1.0.0
+version: 1.0.1
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [bitpool, skills, authoring, report, sql, html, bi]
     category: bitpool
-    related_skills: [create-new-skill, ai-spend-report, edit-skill, build-skill-from-examples, update-hermes-skill]
+    related_skills: [create-new-skill, ai-spend-report, edit-skill, update-hermes-skill]
 ---
 
 # Report Skill Builder
@@ -30,7 +30,7 @@ checklist ship in `references/`.
 
 Don't use for:
 - Running an existing report: run that report's own skill (e.g. `/ai-spend-report`).
-- A skill that isn't a SQL-driven report: `/create-new-skill` or `/build-skill-from-examples`.
+- A skill that isn't a SQL-driven report: `/create-new-skill`.
 - Publishing the finished folder or editing a published skill's non-report content:
   `/create-new-skill` and `/edit-skill` (this skill hands off to them).
 
