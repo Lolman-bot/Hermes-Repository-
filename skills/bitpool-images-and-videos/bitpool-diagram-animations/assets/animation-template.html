@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@@TITLE@@</title>
+<style>
+/*@@FONT@@*/
+
+/* ── Bitpool tokens (light) ─────────────────────────── */
+:root{
+  --bp-white:#ffffff;--bp-surface-2:#f6f8fa;--bp-surface-3:#eef2f6;--bp-surface-4:#e3e9f0;
+  --bp-navy:#1B2732;--bp-ink:#1B2732;--bp-ink-70:#44525f;--bp-ink-50:#6e7c8b;--bp-ink-30:#aab6c2;--bp-text-strong:#0b1218;
+  --bp-accent:#00ADEF;--bp-accent-deep:#007db0;--bp-accent-soft:#5cd0ff;--bp-accent-tint:rgba(0,173,239,0.10);
+  --bp-hair:rgba(11,24,32,0.08);--bp-hair-strong:rgba(11,24,32,0.14);
+  --bp-shadow-frame:0 18px 60px rgba(11,24,32,0.10);--bp-shadow-accent:0 2px 7px rgba(0,173,239,0.45);
+  --bp-font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --bp-font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --bp-ease:cubic-bezier(0.2,0.8,0.2,1);
+  --grid-line:rgba(11,24,32,0.06);--grid-line-major:rgba(11,24,32,0.11);
+  --glow-1:rgba(0,173,239,0.30);--glow-2:rgba(0,173,239,0.17);
+  --beat-grade:linear-gradient(135deg,#ffffff 0%,#eef2f6 55%,#e3e9f0 100%);
+  --page:#e3e9f0;
+}
+/* ── Bitpool tokens (dark): same names, so every component re-themes itself ── */
+.dk{
+  --bp-white:#0b1218;--bp-surface-2:#111b23;--bp-surface-3:#16222c;--bp-surface-4:#1b2a35;
+  --bp-ink:#eef2f6;--bp-ink-70:#aab6c2;--bp-ink-50:#6e7c8b;--bp-ink-30:#394652;--bp-text-strong:#ffffff;
+  --bp-hair:rgba(255,255,255,.08);--bp-hair-strong:rgba(255,255,255,.14);
+  --bp-accent-tint:rgba(0,173,239,.14);--bp-accent-deep:#5cd0ff;
+  --glow-1:rgba(0,173,239,.15);--glow-2:rgba(0,173,239,.10);
+  --grid-line:rgba(255,255,255,.045);--grid-line-major:rgba(255,255,255,.09);
+  --beat-grade:linear-gradient(135deg,#1B2732 0%,#0a1218 55%,#0b1218 100%);
+  --page:#0b1218;
+  color:var(--bp-ink);
+}
+
+/* ── stage: a fixed 1920×1080 canvas, scaled to fit the window ── */
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--page);font-family:var(--bp-font-sans);}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#stage{flex:0 0 auto;width:1920px;height:1080px;transform-origin:center center;position:relative;overflow:hidden;}
+section.slide{width:1920px;height:1080px;position:relative;overflow:hidden;background:var(--beat-grade);color:var(--bp-ink);}
+section.slide.dk{background:#0b1218;}
+#anim::before{content:none;}
+
+/* ── the patterned beat: drifting cyan glow + dual-scale masked grid ── */
+.glow{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 75% 40%,var(--glow-1) 0%,transparent 60%),
+             radial-gradient(ellipse 80% 60% at 15% 80%,var(--glow-2) 0%,transparent 65%),
+             var(--beat-grade);
+  background-size:130% 130%,130% 130%,100% 100%;
+  animation:glowDrift 32s ease-in-out infinite alternate;}
+@keyframes glowDrift{0%{background-position:0% 0%,0% 0%,0% 0%;}100%{background-position:6% -3%,-5% 4%,0% 0%;}}
+.grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(to right,var(--grid-line-major) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-line-major) 1px,transparent 1px),
+                   linear-gradient(to right,var(--grid-line) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-line) 1px,transparent 1px);
+  background-size:256px 256px,256px 256px,64px 64px,64px 64px;background-position:-1px -1px;
+  mask-image:radial-gradient(ellipse at center,#000 0%,#000 55%,rgba(0,0,0,.55) 82%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 0%,#000 55%,rgba(0,0,0,.55) 82%,transparent 100%);}
+
+/* ── brand rules: one font, nothing italic, bold cyan for emphasis ── */
+i,em,cite,address{font-style:normal;}
+strong,.accent{color:var(--bp-accent);font-weight:700;font-style:normal;}
+.chip{display:inline-flex;align-items:center;border:1px solid color-mix(in srgb,var(--bp-accent) 45%,transparent);border-radius:999px;background:var(--bp-white);color:var(--bp-accent-deep);padding:.42rem .85rem;font-size:.82rem;font-weight:500;letter-spacing:.08em;}
+.dk .chip{background:rgba(0,173,239,.12);}
+.eyebrow{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--bp-ink-50);font-weight:500;display:flex;align-items:center;gap:.75rem;}
+.eyebrow i{width:32px;height:1px;background:var(--bp-accent);display:inline-block;}
+
+/* ── motion contract (same as the animation library) ──
+   An element's own style is its finished state; keyframes say where it comes from
+   (fill-mode backwards); motion plays only while the section has .on.
+   --b is the base delay. Reduced motion and print show the finished diagram. */
+section.slide.fx{--b:.4s;}
+.w-stage{position:absolute;left:120px;top:114px;width:1680px;height:852px;}
+.w-stage>*{position:absolute;}
+@media (prefers-reduced-motion:reduce){section.slide.fx *,section.slide.fx *::before,section.slide.fx *::after{animation:none!important;}}
+@media print{section.slide.fx *,section.slide.fx *::before,section.slide.fx *::after{animation:none!important;}
+  @page{size:1920px 1080px;margin:0;} #stage{transform:none!important;}}
+
+/* ── recipes borrowed from the library (only the ones this diagram uses) ── */
+/*@@RECIPES@@*/
+
+/* ── this diagram ── */
+/*@@DIAGRAM_CSS@@*/
+</style>
+</head>
+<body class="@@THEME@@">
+<div id="viewport"><div id="stage">
+<section class="slide fx mx @@SECTION_CLASSES@@ @@THEME@@" id="anim" aria-label="@@TITLE@@">
+  <div class="glow"></div><div class="grid"></div>
+  <div class="w-stage">
+<!--@@DIAGRAM@@-->
+  </div>
+</section>
+</div></div>
+<script>
+/* Fits the 1920×1080 stage to the window, starts the build-in once the font is ready,
+   and replays it on click, R or Space. */
+(function(){
+  var stage=document.getElementById('stage'),s=document.getElementById('anim');
+  function fit(){var k=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+k+')';}
+  addEventListener('resize',fit);fit();
+  function play(){s.classList.remove('on');void s.offsetWidth;s.classList.add('on');}
+  var ready=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+  ready.then(function(){requestAnimationFrame(play);});
+  addEventListener('click',play);
+  addEventListener('keydown',function(e){if(e.key==='r'||e.key==='R'||e.key===' '){e.preventDefault();play();}});
+})();
+</script>
+</body></html>

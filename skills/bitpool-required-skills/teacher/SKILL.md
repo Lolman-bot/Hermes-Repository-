@@ -1,7 +1,7 @@
 ---
 name: teacher
 description: "Use when someone asks how Hermes works. Plain answers."
-version: 1.0.1
+version: 1.0.2
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [bitpool, learning, hermes, onboarding, help]
     category: bitpool
-    related_skills: [onboarding, skills-catalogue, create-new-skill, edit-skill, skill-health, build-skill-from-examples, build-hermes-mod, install-mod, user-config-store]
+    related_skills: [onboarding, skills-catalogue, create-new-skill, edit-skill, skill-health, build-hermes-mod, install-mod, user-config-store]
 ---
 
 # Teacher
@@ -31,7 +31,7 @@ snapshots in `references/`; it never looks anything up live.
 Don't use for:
 
 - Listing which skills exist → `/skills-catalogue`.
-- Building a skill → `/create-new-skill` (or `/build-skill-from-examples`); changing one →
+- Building a skill → `/create-new-skill`; changing one →
   `/edit-skill`; grading one → `/skill-health`.
 - New-starter setup → `/onboarding`.
 - Questions about a Bitpool product rather than about Hermes.

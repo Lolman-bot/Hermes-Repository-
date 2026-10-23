@@ -13,7 +13,6 @@ part they already have.
 | Way in | What you hand over | Best for |
 |---|---|---|
 | **`/create-new-skill` interview** | Describe the job in plain words; attach examples, documents or code. | Most skills. Also brings in a skill folder you already have. |
-| **`/build-skill-from-examples`** | Up to five examples of what comes in and five of what goes out, plus the steps drawn on a point-and-click canvas. | Jobs easier to show than describe; anything with branches. |
 | **Let Hermes save one for you** | Do the job with Hermes once, then ask it to save the approach as a skill. | A personal skill on your own machine. It is *not* shared until it goes through `/create-new-skill`. |
 
 Whichever way: **the detail is theirs** — steps, numbers, rules, format, one example that came out
@@ -41,6 +40,6 @@ or with `hermes skills update` if they already have an earlier version.
 
 ## Where this hands over
 
-- "Start it now" → `/create-new-skill` (or `/build-skill-from-examples`), on a yes.
+- "Start it now" → `/create-new-skill`, on a yes.
 - "Change one that exists" → `/edit-skill`.
 - "It didn't work properly" → `/skill-health`.

@@ -1,7 +1,7 @@
 ---
 name: create-new-skill
 description: "Use when making a new Bitpool skill. Idea to pull request."
-version: 1.0.1
+version: 1.1.0
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [bitpool, skills, authoring, github]
     category: bitpool
-    related_skills: [build-skill-from-examples, edit-skill, update-hermes-skill, skill-health, skills-catalogue, user-config-store]
+    related_skills: [onboarding, edit-skill, update-hermes-skill, skill-health, skills-catalogue, user-config-store]
 ---
 
 # Create New Skill
@@ -23,8 +23,6 @@ the pull request is raised **once**, after the user confirms the skill is finish
 
 - `/create-new-skill`, or when the user asks to create, make, build or bring in a skill: "I want to
   make a skill", "turn this into a skill", "here's a SKILL.md, publish it".
-- A hand-over from `/build-skill-from-examples` ("Arriving from /build-skill-from-examples ...
-  folder at [path] ... start where the finished folder goes into the repo"): begin at step 3.
 - Importing an existing Claude skill (a `SKILL.md` or folder) and converting it to Hermes format.
 
 Don't use for:
@@ -42,18 +40,33 @@ Don't use for:
   first and confirm it with `git -C "<clone_path>" rev-parse --show-toplevel`. If it's missing, ask
   once with `clarify`, explain it will be remembered, and save it. Never probe guessed paths.
 
+## Requirements check (before step 1)
+
+**Check the requirements first, and send anyone who doesn't meet them to `/onboarding`.** This
+skill needs two things on the machine the `terminal` runs on:
+
+- **A local clone of `Lolman-bot/Hermes-Repository-`**, with `origin` set to it. A clone of the
+  Claude plugin repo (`bitpool/ai-skills` or `ai-skills-beta`) won't work.
+- **Git installed and signed in to GitHub** (`gh auth login` plus `gh auth setup-git`), so it can
+  fetch and push.
+
+Check both **before step 1**, not at the pre-flight in step 3, so nobody sits through an interview
+for a skill they can't publish. If either is missing (no clone, a Claude-repo clone, `git` not
+found, or `git fetch` / `gh auth status` refused for sign-in), stop. Tell them in one line which
+requirement isn't met, then hand over to `/onboarding` (load it with `skill_view`), which walks them
+through installing Git, signing in and cloning the repo. Don't fix it in place: never clone,
+install Git or repoint remotes for them. Once they're set up, they run `/create-new-skill` again.
+The checks themselves are the first rows of the pre-flight table in `references/publish.md`.
+
 ## Procedure
 
-1. **Ask which route** with `clarify`, in plain words:
+1. **Ask which route** with `clarify`, in plain words (two options):
    - **Build it with me** — the interview in `references/skill-interview.md`.
    - **I already have one** — the import and Claude-to-Hermes conversion in
      `references/import-existing-skill.md`.
-   - **Build it from my examples and a drawn process** — hand over to `/build-skill-from-examples`
-     (load it with `skill_view`); it writes the folder and hands back at step 3.
 
-   Don't infer the route unless the user has plainly handed over a folder or file. Arriving from
-   `/build-skill-from-examples`, skip to step 3 with the folder it names. Done when the route is
-   chosen (or skipped by hand-over).
+   Don't infer the route unless the user has plainly handed over a folder or file. Done when the
+   route is chosen.
 2. **Run that route** to a finished skill folder: `SKILL.md` built from
    `assets/SKILL.md.template`, plus any `references/`, `assets/`, `scripts/`, `templates/`. Done
    when the user has seen the full `SKILL.md` in chat and said yes to it.
@@ -64,8 +77,6 @@ Don't use for:
    `references/publish.md`: clean tree, `origin` is the Hermes repo, `git fetch`, no open pull
    request already adding that name, branch `add/<skill-name>` from `origin/main`. Byte-exact files
    are copied with `cp`, never retyped. Done when the files are on disk on the branch, uncommitted.
-   (`/build-skill-from-examples` hands over to this step; keep its hand-over notes in
-   step if this changes.)
 4. **Run `/update-hermes-skill`** yourself, every run, without asking: version `1.0.0`, the README
    Skills row, frontmatter compliance. Done when its checker exits 0.
 5. **Refresh the `skills-catalogue` snapshot** from the README's updated Skills table and bump its
@@ -88,7 +99,7 @@ Don't use for:
 2. **Hermes frontmatter exactly as the README specifies**: quoted `description` of ≤ 60 chars that
    starts `Use when` and ends with a period, `version: 1.0.0`, `author`, `license`, `platforms`,
    `metadata.hermes.tags` (incl. `bitpool`), `category: bitpool`, `related_skills` from this repo.
-3. **Folder name == `name` == slash command**, lowercase-hyphenated, directly under `skills/`.
+3. **Folder name == `name` == slash command**, lowercase-hyphenated, under `skills/<section>/`.
 4. **Self-contained.** Detail in `references/`, byte-exact content in `assets/`/`templates/`,
    code in `scripts/`. Nothing fetched at run time, no `../` links, no machine-local paths.
 5. **No pull request until the user says it's finished.** "Probably", "close enough" or silence is

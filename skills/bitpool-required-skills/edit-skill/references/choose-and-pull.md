@@ -18,27 +18,30 @@ If it's missing, ask the user with `clarify` where their clone is, explain once 
 and save it. Never guess a second path — a second clone is how someone edits one copy and pushes
 from the other.
 
-No clone at all? Offer to make one in a folder they choose and remember it:
-
-```bash
-git clone https://github.com/Lolman-bot/Hermes-Repository-.git "<their folder>"
-```
+No clone at all? Stop and send them to `/onboarding`. It walks them through installing Git,
+signing in to GitHub and cloning the repo. Don't clone it for them here. When they come back to
+`/edit-skill`, ask for the new folder and remember it as `clone_path`.
 
 ## 2. Git pre-flight
 
 ```bash
+git --version                          # Git installed?
+gh auth status                         # signed in to GitHub?
 git remote get-url origin              # must be github.com/Lolman-bot/Hermes-Repository-(.git)
 git status --short                     # expect empty
-git fetch origin --prune
+git fetch origin --prune               # reachable and signed in?
 git branch --list "edit/*" "retire/*"  # unfinished work from an earlier run?
 ```
 
 | What you find | What to do |
 |---|---|
-| `origin` is `bitpool/ai-skills` or `bitpool/ai-skills-beta` | Stop. That's the Claude plugin repo. Offer to clone the Hermes repo (section 1) and update `clone_path`. Never repoint remotes quietly. |
+| `git --version` fails | Git isn't installed. Stop, say so, and send them to `/onboarding`. |
+| No clone of `Lolman-bot/Hermes-Repository-` at all | Stop and send them to `/onboarding`. It walks them through installing Git, signing in and cloning the repo. Don't clone it for them here. When they come back, ask for the new folder and remember it as `clone_path` via `/user-config-store`. |
+| `origin` is `bitpool/ai-skills` or `bitpool/ai-skills-beta` | Stop. That's the Claude plugin repo. Say so and send them to `/onboarding`, which sets up a fresh clone of the Hermes repo. When they come back, update `clone_path`. Never repoint remotes quietly. |
 | `origin` is anything else | Stop. This isn't the skills repo. |
 | Uncommitted changes | Stop. Show the list and ask. Never sweep someone else's work into your change. |
-| `git fetch` fails | Stop and report — network or sign-in, not something to work around. |
+| `gh auth status` says not logged in, or `git fetch` is refused (`Authentication failed`, `403`) | Git isn't signed in to GitHub. Stop, say so, and send them to `/onboarding`. |
+| `git fetch` fails on the network (can't resolve host, timed out) | Stop and report it. It's a connection problem, so `/onboarding` won't help, and it isn't something to work around. |
 | A local `edit/<skill-name>` or `retire/<skill-name>` branch | Unfinished work — handle in section 6 once you know the skill. Never delete it without asking. |
 
 **Nothing is ever edited on `main`.** The branch is made in section 6, once the skill is confirmed.

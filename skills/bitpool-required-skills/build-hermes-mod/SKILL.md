@@ -1,7 +1,7 @@
 ---
 name: build-hermes-mod
 description: "Use when asked for a new Hermes mod. Charts, builds, PRs it."
-version: 1.0.1
+version: 1.0.2
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [bitpool, mods, desktop-plugins, tui-widgets, hooks, plugins, skins]
     category: bitpool
-    related_skills: [edit-mod, install-mod, create-new-skill, build-skill-from-examples, edit-skill]
+    related_skills: [edit-mod, install-mod, create-new-skill, edit-skill]
 ---
 
 # Build Hermes Mod
@@ -26,7 +26,7 @@ flow chart of everything it does, tried once, switched on, and published to `mod
   "make a skin that...".
 
 Don't use for:
-- Building a skill rather than a mod: `/create-new-skill` or `/build-skill-from-examples`.
+- Building a skill rather than a mod: `/create-new-skill`.
 - Changing a skill: `/edit-skill`.
 - Fixing or changing a mod that already exists: `/edit-mod`.
 - Installing a published mod: `/install-mod`.

@@ -57,13 +57,12 @@ install by full path as shown above.
 | Skill | What it does | Ships alongside `SKILL.md` |
 |---|---|---|
 | `build-hermes-mod` | Turns a plain description into a Hermes mod (desktop plugin, TUI widget, hook, Python plugin or skin): intake, agreed flow chart, build, tests, trial, switch-on, then a PR to `mods/`. | references/, templates/, assets/ |
-| `build-skill-from-examples` | Builds a new skill from the user's input/output examples and a point-and-click process diagram, then hands it to `/create-new-skill`. | references/, assets/, scripts/ |
-| `create-new-skill` | Takes a new or imported skill from idea to one reviewed PR on this repo, converting Claude skills to Hermes format. | references/, assets/ |
+| `create-new-skill` | Takes a new or imported skill from idea to one reviewed PR on this repo, converting Claude skills to Hermes format; sends anyone without Git or a clone to `/onboarding` first. | references/, assets/ |
 | `edit-mod` | Changes an existing mod: chart first, tests kept passing, live copy synced, user-checked, then republished. | references/ |
-| `edit-skill` | Changes or retires a published skill on its own branch, keeping version, README row and catalogue snapshot in one PR. | references/ |
+| `edit-skill` | Changes or retires a published skill on its own branch, keeping version, README row and catalogue snapshot in one PR; sends anyone without Git or a clone to `/onboarding` first. | references/ |
 | `install-mod` | Lists mods on `main`, installs one into `$HERMES_HOME` following its README and switches it on, or uninstalls it cleanly. | references/ |
 | `log-skill-divergence` | Asks yes/no/silence-for-this-session, then logs a wrong, gappy or mistriggered skill to the shared Team library (or `$HERMES_HOME`) for `/skill-health` and `/edit-skill`. | references/, assets/, scripts/ |
-| `onboarding` | Walks a new starter through Hermes setup, GitHub sign-in, repo access via Eric and installing the required skills, one step at a time. | — |
+| `onboarding` | Walks a new starter through Hermes setup, GitHub sign-in, repo access via Eric, installing Git and cloning the repo, and installing the required skills, one step at a time. | — |
 | `skill-health` | Grades a skill's real run(s) against its own rules with a cited checklist and score (statistics at 3+ runs), then applies chosen fixes. | references/ |
 | `skills-catalogue` | Gives the repo link and lists every Bitpool skill and mod from a dated snapshot. | references/ |
 | `teacher` | Answers questions about how Hermes works in plain words from dated reference snapshots, then points to the next step. | references/ |
@@ -87,6 +86,7 @@ install by full path as shown above.
 | `bitpool-hvac-schematics` | Builds self-contained, on-brand HTML BMS/SCADA graphics for HVAC and central plant with live data chips, animated flow and alarms. | references/, assets/, scripts/ |
 | `bitpool-report-builder` | Builds paginated Bitpool Cloud reports (wizard, canvas, data sources, Preview PDF) by driving a signed-in browser, with permission gates on every write. | references/ |
 | `bitpool-training-deck-builder` | Turns raw training material into a reviewed, self-contained Bitpool HTML training deck built from a 28-layout template plus a 50-animation layout library. | references/, assets/, scripts/ |
+| `bitpool-sld-converter` | Redraws a BMS single line diagram screenshot as a text-free, on-brand meter tree (transparent PNG, SVG and meter positions) for an Image Freeform widget, with an optional opt-in stage that builds the dashboard and attaches one active power stream per meter. | references/, assets/, scripts/ |
 
 ### `bitpool-prototyping` — Prototyping (rubric-driven generate → evaluate → review design loop)
 
@@ -106,6 +106,7 @@ install by full path as shown above.
 | `bitpool-3d-image` | Writes Gemini image-to-image prompts that turn an attached photo, plan or diagram into a Bitpool archviz render, with an optional HTML mockup or handoff page. | references/ |
 | `bitpool-cinematic-photo` | Writes Gemini prompts for Bitpool marketing stills (towers, plant rooms, data centres, cutaways, exploded views) from seven master templates, with optional HTML. | references/ |
 | `bitpool-cinematic-video` | Writes 8-second Veo/Gemini video prompts for Bitpool assembly sequences, fly-throughs and exploded views, with an optional timed HTML animation preview. | references/ |
+| `bitpool-diagram-animations` | Turns a PNG of a diagram into one self-contained, Bitpool-themed (light or dark) HTML animation: confirmed inventory, crisp HTML/SVG redraw, library motion that builds in then loops, and screenshot-checked output. | references/, assets/, scripts/ |
 
 ### `bitpool-general` — General (utilities for any role: docs, writing standard, conversions, transcription)
 

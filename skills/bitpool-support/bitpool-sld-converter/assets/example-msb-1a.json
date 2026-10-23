@@ -1,0 +1,33 @@
+{
+  "board": "MSB-1A",
+  "groups": [
+    {
+      "name": "Unmetered tenant",
+      "main_meter": "MSB-1A-EY TENANT SB-1",
+      "join": 1.5,
+      "rows": [
+        ["TDB-L05-B-P", "TDB-L05-B-L", "TDB-L05-A-P", "TDB-L05-A-L"],
+        ["TDB-L04-B-P", "TDB-L04-B-L", "TDB-L04-A-P", "TDB-L04-A-L", "HDB-L04-P", "HDB-L04-L"],
+        ["TDB-L03-B-P", "TDB-L03-B-L", "TDB-L03-A-P", "TDB-L03-A-L"],
+        ["TDB-L02-B-P", "TDB-L02-B-L", "TDB-L02-A-P", "TDB-L02-A-L"],
+        ["TDB-L01-A-P", "TDB-L01-A-L"]
+      ]
+    },
+    {
+      "name": "Retail",
+      "main_meter": "MSB-1A-DB-RETAIL",
+      "join": 2,
+      "rows": [["RETAIL-1"], ["RETAIL-2"], ["RETAIL-3"], ["RETAIL-4"], ["RETAIL-5"]]
+    },
+    {
+      "name": "Life safety",
+      "main_meter": "MSB-1A ATS-3 (LIFE SAFETY)",
+      "join": 0,
+      "rows": [
+        ["HDB-SS"], ["LIFT-17"], ["PUMP-CW"], ["HDB-AUX-1"], ["LIFT 15 CARPARK LIFT"],
+        ["SPRINKLER/BOOSTER PUMP-1"], ["LIFT-16"], ["SPRINKLER/BOOSTER PUMP-2"],
+        ["HYDRANT PUMP-1"], ["HYDRANT PUMP-2"], ["HYDRANT RELAY PUMP"]
+      ]
+    }
+  ]
+}

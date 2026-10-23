@@ -1,7 +1,7 @@
 ---
 name: edit-skill
 description: "Use when editing or retiring a Bitpool skill. Ends in a PR."
-version: 1.0.1
+version: 1.1.0
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [bitpool, skills, authoring, github]
     category: bitpool
-    related_skills: [create-new-skill, update-hermes-skill, skill-health, skills-catalogue, user-config-store]
+    related_skills: [onboarding, create-new-skill, update-hermes-skill, skill-health, skills-catalogue, user-config-store]
 ---
 
 # Edit Skill
@@ -41,6 +41,23 @@ Don't use for:
 - The clone path, remembered with `/user-config-store` (`get edit-skill clone_path` / `set edit-skill clone_path`); confirm
   it with `git -C "<clone_path>" rev-parse --show-toplevel`. If missing, ask once with `clarify` and
   save it. Never probe guessed paths.
+
+## Requirements check (before step 1)
+
+**Check the requirements first, and send anyone who doesn't meet them to `/onboarding`.** This
+skill needs two things on the machine the `terminal` runs on:
+
+- **A local clone of `Lolman-bot/Hermes-Repository-`**, with `origin` set to it. A clone of the
+  Claude plugin repo (`bitpool/ai-skills` or `ai-skills-beta`) won't work.
+- **Git installed and signed in to GitHub** (`gh auth login` plus `gh auth setup-git`), so it can
+  fetch and push.
+
+If either is missing (no clone, a Claude-repo clone, `git` not found, or `git fetch` /
+`gh auth status` refused for sign-in), stop. Tell them in one line which requirement isn't met, then
+hand over to `/onboarding` (load it with `skill_view`), which walks them through installing Git,
+signing in and cloning the repo. Don't fix it in place: never clone, install Git or repoint remotes
+for them. Once they're set up, they run `/edit-skill` again. The checks themselves are in
+`references/choose-and-pull.md`.
 
 ## Procedure
 
