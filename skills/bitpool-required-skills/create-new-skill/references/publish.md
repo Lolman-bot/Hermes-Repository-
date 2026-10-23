@@ -12,18 +12,27 @@ All commands run in `terminal` from the clone root. Quote every path.
 Run all of these before writing a single file. Any surprise stops the run and goes to the user.
 
 ```bash
+git --version                    # Git installed?
+gh auth status                   # signed in to GitHub?
 git remote get-url origin        # must be github.com/Lolman-bot/Hermes-Repository-(.git)
 git status --short               # expect empty
-git fetch origin --prune
+git fetch origin --prune         # reachable and signed in?
 git branch --list "add/*"        # unfinished work from an earlier run?
 ```
 
+Run the `git --version`, `gh auth status`, `origin` and `git fetch` checks once **before step 1**,
+as well as here. They're the requirements check in `SKILL.md`, and anyone who fails one is sent to
+`/onboarding` before the interview starts.
+
 | What you find | What to do |
 |---|---|
-| `origin` is `bitpool/ai-skills` or `bitpool/ai-skills-beta` | Stop. That's the Claude plugin repo, not the Hermes one. Offer to clone the Hermes repo fresh into a folder they choose (`git clone https://github.com/Lolman-bot/Hermes-Repository-.git "<folder>"`) and update `clone_path` via `/user-config-store`. Never repoint remotes quietly. |
+| `git --version` fails | Git isn't installed. Stop, say so, and send them to `/onboarding`. |
+| No clone of `Lolman-bot/Hermes-Repository-` at all | Stop and send them to `/onboarding`. It walks them through installing Git, signing in and cloning the repo. Don't clone it for them here. When they come back, ask for the new folder and remember it as `clone_path` via `/user-config-store`. |
+| `origin` is `bitpool/ai-skills` or `bitpool/ai-skills-beta` | Stop. That's the Claude plugin repo, not the Hermes one. Say so and send them to `/onboarding`, which sets up a fresh clone of the Hermes repo. When they come back, update `clone_path` via `/user-config-store`. Never repoint remotes quietly. |
 | `origin` is anything else | Stop. This isn't the skills repo. |
 | Uncommitted changes | Stop. Show the list and ask. Never sweep someone else's work into your change. |
-| `git fetch` fails | Stop and report it — network or sign-in, not something to work around. |
+| `gh auth status` says not logged in, or `git fetch` is refused (`Authentication failed`, `403`) | Git isn't signed in to GitHub. Stop, say so, and send them to `/onboarding`. |
+| `git fetch` fails on the network (can't resolve host, timed out) | Stop and report it. It's a connection problem, so `/onboarding` won't help, and it isn't something to work around. |
 | A local `add/<skill-name>` branch exists | Unfinished work, usually from **Try it out first**. Ask with `clarify`: pick it up (`git checkout add/<skill-name>`) or start again. Never delete it without asking. |
 
 Then check nobody already has a pull request open adding that name:
