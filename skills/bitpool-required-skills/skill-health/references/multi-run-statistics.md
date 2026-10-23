@@ -71,7 +71,7 @@ Two consequences to state plainly in the report:
 
 ## 8. Check per-stage health for multi-stage skills
 
-Some skills are a chain: `build-skill-from-examples` hands off to `create-new-skill`, which runs
+Some skills are a chain: `report-skill-builder` hands off to `create-new-skill`, which runs
 `update-hermes-skill`; `edit-skill` calls the same, and a skill that uses `delegate_task` runs stages
 in subagents. For those, one overall rate hides where the problem is.
 
