@@ -1,0 +1,23 @@
+{
+  "board": "DEMO-MSB",
+  "groups": [
+    {
+      "name": "Tower feeder",
+      "main_meter": "DEMO-MSB-TOWER",
+      "join": 0,
+      "rows": [
+        ["DB-L01", {"label": "DB-L02", "children": [["DB-L02-A", "DB-L02-B"], [{"label": "DB-L02-C", "children": [["DB-L02-C1", "DB-L02-C2"]]}]]}, "DB-L03"],
+        ["DB-L04"]
+      ]
+    },
+    {
+      "name": "Retail feeder",
+      "main_meter": "DEMO-MSB-RETAIL",
+      "join": 0,
+      "rows": [
+        [{"label": "DB-R01", "children": [["DB-R01-A"]]}, "DB-R02"],
+        ["DB-R03", "DB-R04"]
+      ]
+    }
+  ]
+}
