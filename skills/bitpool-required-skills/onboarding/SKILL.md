@@ -1,7 +1,7 @@
 ---
 name: onboarding
 description: "Use when a new starter sets up Hermes. One step at a time."
-version: 1.0.1
+version: 1.1.0
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
@@ -16,14 +16,17 @@ metadata:
 
 Walks a brand-new Hermes user at Bitpool through getting fully set up, one step at a time, waiting
 for them to confirm each step before the next. By the end they have a working model, GitHub signed
-in, Eric asked to add them to the Bitpool skills repo, the required skills installed, and they know
-which skills to reach for next. Purely conversational: it says what to run; the user runs it.
+in, Eric asked to add them to the Bitpool skills repo, Git installed with a local clone of that
+repo, the required skills installed, and they know which skills to reach for next. Purely conversational: it says what to run; the user runs it.
 
 ## When to Use
 
 - The user types `/onboarding`.
 - A new starter asks to get set up: "how do I get started with Hermes", "I'm new, how do I set this
   up", "walk me through onboarding".
+- A hand-over from `/create-new-skill` or `/edit-skill` when the user has no usable clone of the
+  skills repo, or Git isn't installed and signed in. Still run every step (rule 5); step 4 is the
+  one that fixes their problem. At the close, tell them to run the skill they came from again.
 
 Don't use for:
 
@@ -61,8 +64,33 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
    Bitpool skills repo, `Lolman-bot/Hermes-Repository-`. Then they must **accept the invitation**
    GitHub emails them (or the one at https://github.com/notifications). Done when they confirm
    they've messaged Eric — and, if the invite has already arrived, accepted it. If it hasn't
-   arrived yet, carry on; step 4 will fail with "not found" until it's accepted.
-4. **Install the required skills** straight from the Bitpool repo by full path (13 commands —
+   arrived yet, carry on and come back to it.
+4. **Install Git, sign it in, and clone the skills repo.** `/create-new-skill` and `/edit-skill`
+   work in a copy of the repo on their own machine, and they won't run without one. Take it in
+   three parts and wait after each:
+   - **Install Git.** If `git --version` prints a version, it's already there. Otherwise, on
+     Windows run `winget install --id Git.Git -e` (or install Git for Windows from
+     https://git-scm.com/download/win with the default options), then open a new terminal. On a
+     Mac, run `xcode-select --install`. Linux: the distro's package manager (`sudo apt install git`).
+   - **Let Git use the GitHub sign-in from step 2**, so it can push later:
+
+     ```
+     gh auth setup-git
+     ```
+
+   - **Clone the repo** in a folder they choose (`Documents/GitHub` is a good default):
+
+     ```
+     git clone https://github.com/Lolman-bot/Hermes-Repository-.git
+     ```
+
+     Then check it: `git -C Hermes-Repository- remote get-url origin` must print
+     `https://github.com/Lolman-bot/Hermes-Repository-.git`. A clone of the Claude plugin repo
+     (`bitpool/ai-skills` or `ai-skills-beta`) won't work; clone fresh rather than repointing it.
+     Publishing still needs Eric's invite from step 3 accepted, or the first push fails with 403.
+
+   Done when they've confirmed all three parts.
+5. **Install the required skills** straight from the Bitpool repo by full path (12 commands —
    paste them all at once). Skills sit in section folders, so the path includes
    `bitpool-required-skills/`:
 
@@ -72,7 +100,6 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/skills-catalogue --category bitpool
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/create-new-skill --category bitpool
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/edit-skill --category bitpool
-   hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/build-skill-from-examples --category bitpool
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/skill-health --category bitpool
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/log-skill-divergence --category bitpool
    hermes skills install Lolman-bot/Hermes-Repository-/skills/bitpool-required-skills/update-hermes-skill --category bitpool
@@ -87,7 +114,7 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
    401 → the repo invite isn't accepted yet, or `gh auth login` didn't finish (back to steps 2-3).
    Done when `hermes skills list` shows them. Later, `hermes skills check` and `hermes skills
    update` keep them current.
-5. **Optional: Discord.** Ask whether they want to talk to Hermes from Discord. If no, skip. If yes:
+6. **Optional: Discord.** Ask whether they want to talk to Hermes from Discord. If no, skip. If yes:
    they create a bot in the Discord Developer Portal (application → bot → turn on **Message Content
    Intent** → copy the bot token), then run:
 
@@ -98,11 +125,11 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
    pick Discord, paste the token, and use the invite link it prints. `hermes gateway` starts it.
    Full steps: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord. Done when
    they confirm, or say they'll do it later.
-6. **How a skill gets called.** Information, not a task — say it and carry straight on:
+7. **How a skill gets called.** Information, not a task — say it and carry straight on:
    type `/` and the skill's name (`/teacher`), optionally followed by what they want; or just ask in
    plain words and Hermes picks the matching skill. Works in the terminal, the desktop app and on
    Discord.
-7. **Close out — where to go next.** Name all four, in this order, one plain line each:
+8. **Close out — where to go next.** Name all four, in this order, one plain line each:
    - `/teacher` — ask it anything about using or getting more out of Hermes day to day.
    - `/skills-catalogue` — see every Bitpool skill and mod available to install.
    - `/create-new-skill` — turn something they do repeatedly into a skill of their own, built through
@@ -122,9 +149,9 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
    the ones nobody discovers alone; a new starter who never hears them assumes skills are something
    other people make.
 3. **One step at a time, and wait for them.** Never dump the whole checklist in one message. The
-   one exception is step 6, which is an explanation — say it and go straight to the close.
+   one exception is step 7, which is an explanation — say it and go straight to the close.
 4. **Never act on their behalf.** Don't run `terminal` commands, sign in, install skills, set up
-   the gateway or send messages for them. You describe; they do it in their own terminal and
+   the gateway, install Git, clone the repo or send messages for them. You describe; they do it in their own terminal and
    accounts. Reading back output they paste is fine.
 5. **Don't skip a step because they say it's already done.** Confirm quickly and move on, but every
    step is still said out loud — including the Eric message.
@@ -144,7 +171,7 @@ their own terminal (PowerShell on Windows, Terminal on macOS/Linux).
 
 ## Verification
 
-- Every step 1-7 was said, in order, one per message (step 6 may share a message with step 7).
+- Every step 1-8 was said, in order, one per message (step 7 may share a message with step 8).
 - The Eric message was said this run.
 - The close named `/teacher`, `/skills-catalogue`, `/create-new-skill` and `/edit-skill`.
 - No command was run on the user's behalf.
