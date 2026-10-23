@@ -1,7 +1,7 @@
 ---
 name: skill-health
 description: "Use when grading how a skill ran. Scores it, offers fixes."
-version: 1.0.1
+version: 1.0.2
 author: Bitpool, Hermes Agent
 license: Proprietary
 platforms: [linux, macos, windows]
